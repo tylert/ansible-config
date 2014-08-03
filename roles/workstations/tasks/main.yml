@@ -1,5 +1,4 @@
 ---
-- include: firewall.yml
 - include: gqrx.yml
 
 - name: install useful clicky packages

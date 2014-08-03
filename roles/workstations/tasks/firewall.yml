@@ -1,8 +1,0 @@
----
-- name: copy firewall
-  copy: src=firewall dest=/etc/firewall owner=root group=root mode=0755
-  notify: restart firewall
-
-- name: boot with firewall
-  lineinfile: dest=/etc/rc.local line='/etc/firewall start'
-              insertbefore='exit 0'

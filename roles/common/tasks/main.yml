@@ -1,4 +1,12 @@
 ---
+- name: copy over firewall script
+  copy: src=firewall dest=/etc/firewall owner=root group=root mode=0755
+  notify: restart firewall
+
+- name: make sure firewall script gets run at boot time
+  lineinfile: dest=/etc/rc.local line='/etc/firewall start'
+              insertbefore='exit 0'
+
 - name: turn off sudo passwords for members of the sudo group
   copy: src=99-sudoers dest=/etc/sudoers.d/99-sudoers
         owner=root group=root mode=0440

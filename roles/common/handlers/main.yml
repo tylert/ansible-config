@@ -1,2 +1,3 @@
 ---
-- include: firewall.yml
+- name: restart firewall
+  command: /etc/firewall restart
