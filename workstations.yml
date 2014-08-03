@@ -1,0 +1,6 @@
+---
+- hosts: workstations
+  sudo: yes
+  roles:
+    - common
+    - workstations

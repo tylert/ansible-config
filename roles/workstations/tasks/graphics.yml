@@ -1,0 +1,7 @@
+---
+- name: install graphical packages
+  apt: pkg="{{ item }}" state=present
+  with_items:
+    - inkscape
+#    - blender
+#    - librecad
