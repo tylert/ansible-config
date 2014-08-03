@@ -1,5 +1,5 @@
-ansible-wtf
-===========
+ansible-management
+==================
 
   ansible-playbook site.yml \
     --limit=pinky,brain \
