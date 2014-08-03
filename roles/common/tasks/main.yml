@@ -1,5 +1,6 @@
 ---
 - include: sudoers.yml
+- include: dist-upgrade.yml
 
 - name: install essential packages needed on all machines
   apt: pkg="{{ item }}" state=present

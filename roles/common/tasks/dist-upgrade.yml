@@ -1,5 +1,4 @@
 ---
-- hosts: all
-  tasks:
-  - name: dist-upgrade
-    apt: update_cache=yes upgrade=dist
+- name: dist-upgrade
+  apt: update_cache=yes upgrade=dist
+  tags: upgrade
