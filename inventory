@@ -1,5 +1,5 @@
 [workstations]
-radish
+radish type=developer
 parsnip
 turnip
 incognito

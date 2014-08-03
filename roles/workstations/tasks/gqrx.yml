@@ -1,10 +1,10 @@
 ---
-- name: install gqrx
+- name: Install gqrx
   apt: pkg=gqrx-sdr state=present
 
-- name: blacklist dvb module
+- name: Blacklist the dvb kernel module
   kernel_blacklist: blacklist_file=/etc/modprobe.d/blacklist-rtlsdr.conf
                     name=dvb_usb_rtl28xxu state=present
 
-- name: unload dvb module
+- name: Unload the dvb kernel module
   modprobe: name=dvb_usb_rtl28xxu state=absent

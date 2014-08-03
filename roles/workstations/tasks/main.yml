@@ -15,16 +15,18 @@
 #    - sshfs
 #    - virtualbox
 
-- name: Install other ubuntu packages
+- name: Install other Ubuntu packages
   apt: pkg="{{ item }}" state=present
   with_items:
+    - firefox
     - thunderbird
     - enigmail
   when: ansible_distribution == 'Ubuntu'
 
-- name: Install other debian packages
+- name: Install other Debian packages
   apt: pkg="{{ item }}" state=present
   with_items:
+    - iceweasel
     - icedove
     - enigmail
   when: ansible_distribution == 'Debian'
