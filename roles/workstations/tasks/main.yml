@@ -4,7 +4,11 @@
 - name: install useful clicky packages
   apt: pkg="{{ item }}" state=present
   with_items:
+    - gitk
     - keepassx
     - inkscape
 #    - blender
 #    - librecad
+#    - vlc
+#    - sshfs
+#    - virtualbox
