@@ -1,13 +1,13 @@
 ---
-- name: copy over the firewall script
+- name: Copy over the firewall script
   copy: src=firewall dest=/etc/firewall owner=root group=root mode=0755
-  notify: restart firewall
+  notify: Restart firewall
 
-- name: make sure the firewall script gets run at boot time
+- name: Make sure the firewall script gets run at boot time
   lineinfile: dest=/etc/rc.local line='/etc/firewall start'
               insertbefore='exit 0' state=present
 
-- name: turn off sudo passwords for members of the sudo group
+- name: Turn off sudo passwords for members of the sudo group
   lineinfile: dest=/etc/sudoers.d/99-sudoers create=yes
               line='%sudo ALL=(ALL) NOPASSWD:ALL' state=present
 
@@ -15,7 +15,7 @@
   apt: upgrade=dist
 # apt: update_cache=yes upgrade=dist
 
-- name: install essential packages needed on all machines
+- name: Install essential packages needed on all machines
   apt: pkg="{{ item }}" state=present
   with_items:
     - screen

@@ -1,7 +1,7 @@
 ---
 - include: gqrx.yml
 
-- name: install useful clicky packages
+- name: Install useful clicky packages
   apt: pkg="{{ item }}" state=present
   with_items:
     - gitk
@@ -14,3 +14,17 @@
 #    - vlc
 #    - sshfs
 #    - virtualbox
+
+- name: Install other ubuntu packages
+  apt: pkg="{{ item }}" state=present
+  with_items:
+    - thunderbird
+    - enigmail
+  when: ansible_distribution == 'Ubuntu'
+
+- name: Install other debian packages
+  apt: pkg="{{ item }}" state=present
+  with_items:
+    - icedove
+    - enigmail
+  when: ansible_distribution == 'Debian'
