@@ -23,7 +23,6 @@ function load
     -j ACCEPT
   iptables -A INPUT -p icmp -m limit --limit 4/s --limit-burst 8 -j ACCEPT
   iptables -A INPUT -p tcp -m tcp --dport 22 -j ACCEPT  # ssh
-  iptables -A INPUT -p tcp -m tcp --dport 6000 -j ACCEPT  # x11-0
   iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
   iptables -A INPUT -s 127.0.0.1 -j ACCEPT
   echo "DONE"
@@ -36,7 +35,6 @@ function load
     -j ACCEPT
   ip6tables -A INPUT -p icmp -m limit --limit 4/s --limit-burst 8 -j ACCEPT
   ip6tables -A INPUT -p tcp -m tcp --dport 22 -j ACCEPT  # ssh
-  ip6tables -A INPUT -p tcp -m tcp --dport 6000 -j ACCEPT  # x11-0
   ip6tables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
   ip6tables -A INPUT -s ::1 -j ACCEPT
   echo "DONE"
