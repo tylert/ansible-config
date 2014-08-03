@@ -1,2 +1,3 @@
 ---
+- include: sudoers.yml
 - include: essential.yml
