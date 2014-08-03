@@ -12,8 +12,8 @@
               line='%sudo ALL=(ALL) NOPASSWD:ALL' state=present
 
 - name: dist-upgrade
-  apt: update_cache=yes upgrade=dist
-  tags: upgrade
+  apt: upgrade=dist
+# apt: update_cache=yes upgrade=dist
 
 - name: install essential packages needed on all machines
   apt: pkg="{{ item }}" state=present
