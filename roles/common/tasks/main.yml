@@ -5,11 +5,11 @@
 
 - name: make sure the firewall script gets run at boot time
   lineinfile: dest=/etc/rc.local line='/etc/firewall start'
-              insertbefore='exit 0'
+              insertbefore='exit 0' state=present
 
 - name: turn off sudo passwords for members of the sudo group
-  copy: src=99-sudoers dest=/etc/sudoers.d/99-sudoers
-        owner=root group=root mode=0440
+  lineinfile: dest=/etc/sudoers.d/99-sudoers create=yes
+              line='%sudo ALL=(ALL) NOPASSWD:ALL' state=present
 
 - name: dist-upgrade
   apt: update_cache=yes upgrade=dist
