@@ -1,6 +1,11 @@
 ---
-- include: sudoers.yml
-- include: dist-upgrade.yml
+- name: turn off sudo passwords for members of the sudo group
+  copy: src=99-sudoers dest=/etc/sudoers.d/99-sudoers
+        owner=root group=root mode=0440
+
+- name: dist-upgrade
+  apt: update_cache=yes upgrade=dist
+  tags: upgrade
 
 - name: install essential packages needed on all machines
   apt: pkg="{{ item }}" state=present
