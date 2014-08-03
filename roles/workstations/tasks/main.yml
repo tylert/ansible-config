@@ -5,10 +5,12 @@
   apt: pkg="{{ item }}" state=present
   with_items:
     - gitk
+    - build-essential
     - keepassx
+    - libreoffice
+    - librecad
     - inkscape
 #    - blender
-#    - librecad
 #    - vlc
 #    - sshfs
 #    - virtualbox

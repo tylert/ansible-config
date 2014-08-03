@@ -1,9 +1,9 @@
 ---
-- name: copy over firewall script
+- name: copy over the firewall script
   copy: src=firewall dest=/etc/firewall owner=root group=root mode=0755
   notify: restart firewall
 
-- name: make sure firewall script gets run at boot time
+- name: make sure the firewall script gets run at boot time
   lineinfile: dest=/etc/rc.local line='/etc/firewall start'
               insertbefore='exit 0'
 
@@ -18,5 +18,6 @@
 - name: install essential packages needed on all machines
   apt: pkg="{{ item }}" state=present
   with_items:
+    - screen
     - git
     - ansible
