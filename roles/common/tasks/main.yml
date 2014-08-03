@@ -1,3 +1,7 @@
 ---
 - include: sudoers.yml
-- include: essential.yml
+
+- name: install essential packages needed on all machines
+  apt: pkg="{{ item }}" state=present
+  with_items:
+    - git

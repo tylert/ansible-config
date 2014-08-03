@@ -1,2 +1,10 @@
 ---
 - include: firewall.yml
+
+- name: install useful clicky packages
+  apt: pkg="{{ item }}" state=present
+  with_items:
+    - keepassx
+    - inkscape
+#    - blender
+#    - librecad
