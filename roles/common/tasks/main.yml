@@ -19,7 +19,7 @@
   copy: src=com.ubuntu.enable-hibernate.pkla
         dest=/var/lib/polkit-1/localauthority/50-local.d/com.ubuntu.enable-hibernate.pkla
 
-- name: Install essential packages needed on all machines
+- name: Install some essential administration packages needed on all machines
   apt: pkg="{{ item }}" state=present
   with_items:
     - screen
@@ -27,6 +27,7 @@
     - ansible
     - vim
     - vim-scripts
+    - ethtool
 
 # In wheezy, 'git' was called 'git-core'
 # when: ansible_distribution == 'Debian' and
