@@ -9,7 +9,7 @@
 
 - name: Turn off sudo passwords for members of the sudo group
   lineinfile: dest=/etc/sudoers.d/99-sudoers create=yes
-              line='%sudo ALL=(ALL) NOPASSWD:ALL' state=present
+              line='%manager ALL=(ALL) NOPASSWD:ALL' state=present
 
 - name: dist-upgrade
   apt: upgrade=dist
