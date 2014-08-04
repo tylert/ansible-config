@@ -7,8 +7,8 @@
   lineinfile: dest=/etc/rc.local line='/etc/firewall start'
               insertbefore='exit 0' state=present
 
-- name: Turn off sudo passwords for members of the sudo group
-  lineinfile: dest=/etc/sudoers.d/99-sudoers create=yes
+- name: Turn off sudo passwords for members of the manager group
+  lineinfile: dest=/etc/sudoers.d/99-manager create=yes
               line='%manager ALL=(ALL) NOPASSWD:ALL' state=present
 
 - name: dist-upgrade
@@ -29,6 +29,6 @@
     - vim-scripts
     - ethtool
 
-# In wheezy, 'git' was called 'git-core'
+# In older Debian, 'git' was called 'git-core'
 # when: ansible_distribution == 'Debian' and
-#       ansible_distribution_version >= '7.0'
+#       ansible_distribution_version <= '7.0'
