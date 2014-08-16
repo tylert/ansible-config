@@ -2,11 +2,14 @@
 - name: Install gqrx
   apt: pkg=gqrx-sdr state=present
 
+# add-apt-repository ppa:gqrx/snapshots
+
+# deb http://ppa.launchpad.net/gqrx/snapshots/ubuntu trusty main 
+# deb-src http://ppa.launchpad.net/gqrx/snapshots/ubuntu trusty main 
+
 - name: Blacklist the dvb kernel module
   kernel_blacklist: blacklist_file=/etc/modprobe.d/blacklist-rtlsdr.conf
                     name=dvb_usb_rtl28xxu state=present
 
 - name: Unload the dvb kernel module
   modprobe: name=dvb_usb_rtl28xxu state=absent
-
-# add-apt-repository ppa:gqrx/snapshots
