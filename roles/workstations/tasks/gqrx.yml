@@ -8,3 +8,5 @@
 
 - name: Unload the dvb kernel module
   modprobe: name=dvb_usb_rtl28xxu state=absent
+
+# add-apt-repository ppa:gqrx/snapshots
