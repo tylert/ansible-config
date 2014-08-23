@@ -7,9 +7,9 @@
   lineinfile: dest=/etc/rc.local line='/etc/firewall start'
               insertbefore='exit 0' state=present
 
-- name: Turn off sudo passwords for members of the manager group
-  lineinfile: dest=/etc/sudoers.d/99-manager create=yes
-              line='%manager ALL=(ALL) NOPASSWD:ALL' state=present
+- name: Turn off sudo passwords for members of the ghost group
+  lineinfile: dest=/etc/sudoers.d/99-ghost create=yes
+              line='%ghost ALL=(ALL) NOPASSWD:ALL' state=present
 
 - name: dist-upgrade
   apt: upgrade=dist
