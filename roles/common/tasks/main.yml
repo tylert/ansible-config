@@ -11,6 +11,9 @@
   lineinfile: dest=/etc/sudoers.d/99-ghost create=yes
               line='%ghost ALL=(ALL) NOPASSWD:ALL' state=present
 
+- name: Disable password login for the ghost user
+  user: name=ghost password='!' state=present
+
 - name: dist-upgrade
   apt: upgrade=dist
 # apt: update_cache=yes upgrade=dist
