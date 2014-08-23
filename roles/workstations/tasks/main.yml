@@ -1,6 +1,6 @@
 ---
-- include: gqrx.yml
-- include: phone.yml
+#- include: gqrx.yml
+#- include: phone.yml
 
 - name: Install useful clicky packages
   apt: pkg="{{ item }}" state=present
