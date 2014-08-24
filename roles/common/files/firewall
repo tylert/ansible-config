@@ -3,57 +3,75 @@
 set -e
 
 # iptables tables and default chains
-#   filter  INPUT, FORWARD, OUTPUT
-#   nat     PREROUTING, OUTPUT, POSTROUTING
-#   mangle  PREROUTING, INPUT, FORWARD, OUTPUT, POSTROUTING
-#   raw     PREROUTING, OUTPUT
+#   filter    INPUT, FORWARD, OUTPUT
+#   nat       PREROUTING, OUTPUT, POSTROUTING
+#   mangle    PREROUTING, OUTPUT, INPUT, FORWARD, POSTROUTING
+#   raw       PREROUTING, OUTPUT
+#   security  INPUT, OUTPUT, FORWARD
 
 # ip6tables tables and default chains
-#   filter  INPUT, FORWARD, OUTPUT
-#   mangle  PREROUTING, INPUT, FORWARD, OUTPUT, POSTROUTING
-#   raw     PREROUTING, OUTPUT
+#   filter    INPUT, FORWARD, OUTPUT
+#   mangle    PREROUTING, OUTPUT, INPUT, FORWARD, POSTROUTING
+#   raw       PREROUTING, OUTPUT
+#   security  INPUT, OUTPUT, FORWARD
 
 function load
 {
   echo -n "Loading IPv4 rules..."
-  iptables -P FORWARD DROP
+  iptables --table filter --policy FORWARD DROP
 
-  iptables -P INPUT DROP
-  iptables -A INPUT -p tcp --syn -m limit --limit 25/s --limit-burst 50 \
-    -j ACCEPT
-  iptables -A INPUT -p icmp -m limit --limit 4/s --limit-burst 8 -j ACCEPT
-  iptables -A INPUT -p tcp -m tcp --dport 22 -j ACCEPT  # ssh
-  iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
-  iptables -A INPUT -s 127.0.0.1 -j ACCEPT
+  iptables --table filter --policy INPUT DROP
+  # SYN requests
+  iptables --table filter --append INPUT --protocol tcp --syn --match limit \
+    --limit 25/s --limit-burst 50 --jump ACCEPT
+  # ping
+  iptables --table filter --append INPUT --protocol icmp --match limit \
+    --limit 4/s --limit-burst 8 --jump ACCEPT
+  # ssh
+  iptables --table filter --append INPUT --protocol tcp --match tcp \
+    --dport 22 --jump ACCEPT
+  # Existing connections
+  iptables --table filter --append INPUT --match state \
+    --state ESTABLISHED,RELATED --jump ACCEPT
+  # New outbound connections
+  iptables --table filter --append INPUT --source 127.0.0.1 --jump ACCEPT
   echo "DONE"
 
   echo -n "Loading IPv6 rules..."
-  ip6tables -P FORWARD DROP
+  ip6tables --table filter --policy FORWARD DROP
 
-  ip6tables -P INPUT DROP
-  ip6tables -A INPUT -p tcp --syn -m limit --limit 25/s --limit-burst 50 \
-    -j ACCEPT
-  ip6tables -A INPUT -p icmp -m limit --limit 4/s --limit-burst 8 -j ACCEPT
-  ip6tables -A INPUT -p tcp -m tcp --dport 22 -j ACCEPT  # ssh
-  ip6tables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
-  ip6tables -A INPUT -s ::1 -j ACCEPT
+  ip6tables --table filter --policy INPUT DROP
+  # SYN requests
+  ip6tables --table filter --append INPUT --protocol tcp --syn --match limit \
+    --limit 25/s --limit-burst 50 --jump ACCEPT
+  # ping
+  ip6tables --table filter --append INPUT --protocol icmp --match limit \
+    --limit 4/s --limit-burst 8 --jump ACCEPT
+  # ssh
+  ip6tables --table filter --append INPUT --protocol tcp --match tcp \
+    --dport 22 --jump ACCEPT
+  # Existing connections
+  ip6tables --table filter --append INPUT --match state \
+    --state ESTABLISHED,RELATED --jump ACCEPT
+  # New outbound connections
+  ip6tables --table filter --append INPUT --source ::1 --jump ACCEPT
   echo "DONE"
 }
 
 function flush
 {
   echo -n "Flushing IPv4 rules..."
-  iptables -P FORWARD ACCEPT
+  iptables --table filter --policy FORWARD ACCEPT
 
-  iptables -F INPUT
-  iptables -P INPUT ACCEPT
+  iptables --table filter --flush INPUT
+  iptables --table filter --policy INPUT ACCEPT
   echo "DONE"
 
   echo -n "Flushing IPv6 rules..."
-  ip6tables -P FORWARD ACCEPT
+  ip6tables --table filter --policy FORWARD ACCEPT
 
-  ip6tables -F INPUT
-  ip6tables -P INPUT ACCEPT
+  ip6tables --table filter --flush INPUT
+  ip6tables --table filter --policy INPUT ACCEPT
   echo "DONE"
 }
 
