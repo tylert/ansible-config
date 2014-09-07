@@ -1,6 +1,7 @@
 ---
 #- include: gqrx.yml
 #- include: heimdall.yml
+- include: firewall.yml
 
 - name: Install useful clicky packages
   apt: pkg="{{ item }}" state=present

@@ -1,12 +1,4 @@
 ---
-- name: Copy over the firewall script
-  copy: src=firewall dest=/etc/firewall owner=root group=root mode=0755
-  notify: Restart firewall
-
-- name: Make sure the firewall script gets run at boot time
-  lineinfile: dest=/etc/rc.local line='/etc/firewall start'
-              insertbefore='exit 0' state=present
-
 - name: Turn off sudo passwords for members of the ghost group
   lineinfile: dest=/etc/sudoers.d/99-ghost create=yes
               line='%ghost ALL=(ALL) NOPASSWD:ALL' state=present
