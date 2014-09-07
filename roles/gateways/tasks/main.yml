@@ -5,3 +5,8 @@
     - pppoeconf
     - dnsmasq
     - hostapd
+
+- name: Copy dnsmasq config
+  copy: src=dnsmasq.conf dest=/etc/dnsmasq.d/site.conf
+        owner=root group=root mode=0644
+  notify: Restart dnsmasq
