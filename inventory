@@ -2,10 +2,10 @@
 radish type=developer
 parsnip
 turnip
-incognito
 
-[servers]
+[gateways]
 milena
+
 #delta
 #gamma
 #sigma
