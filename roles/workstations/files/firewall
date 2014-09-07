@@ -33,7 +33,7 @@ function load
   # Existing connections
   iptables --table filter --append INPUT --match state \
     --state ESTABLISHED,RELATED --jump ACCEPT
-  # New outbound connections
+  # New connections
   iptables --table filter --append INPUT --source 127.0.0.1 --jump ACCEPT
   echo "DONE"
 
@@ -53,7 +53,7 @@ function load
   # Existing connections
   ip6tables --table filter --append INPUT --match state \
     --state ESTABLISHED,RELATED --jump ACCEPT
-  # New outbound connections
+  # New connections
   ip6tables --table filter --append INPUT --source ::1 --jump ACCEPT
   echo "DONE"
 }

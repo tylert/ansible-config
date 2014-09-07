@@ -8,7 +8,7 @@
 
 - name: dist-upgrade
   apt: upgrade=dist
-# apt: update_cache=yes upgrade=dist
+#  apt: update_cache=yes upgrade=dist
 
 - name: Install some essential administration packages needed on all machines
   apt: pkg="{{ item }}" state=present
