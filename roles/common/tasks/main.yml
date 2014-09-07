@@ -10,16 +10,12 @@
   apt: upgrade=dist
 # apt: update_cache=yes upgrade=dist
 
-- name: Re-enable hibernate
-  copy: src=com.ubuntu.enable-hibernate.pkla
-        dest=/var/lib/polkit-1/localauthority/50-local.d/com.ubuntu.enable-hibernate.pkla
-
 - name: Install some essential administration packages needed on all machines
   apt: pkg="{{ item }}" state=present
   with_items:
     - screen
     - git
-    - ansible
+#    - ansible
     - vim
     - vim-scripts
     - ethtool
