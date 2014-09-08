@@ -15,65 +15,105 @@ set -e
 #   raw       PREROUTING, OUTPUT
 #   security  INPUT, OUTPUT, FORWARD
 
+function block
+{
+  local iptables="${1}"
+  local localhost="${2}"
+
+  echo -n "Loading '${iptables}' blocking rules..."
+
+  # Be more picky about what we forward
+  ${iptables} --table filter --policy FORWARD DROP
+
+  # Be more picky about what we allow
+  ${iptables} --table filter --policy INPUT DROP
+
+  # Attempt to protect against SYN flooding
+  ${iptables} --table filter --append INPUT \
+    --protocol tcp --syn --match limit \
+    --limit 25/s --limit-burst 50 --jump ACCEPT
+
+  # Accept a few pings
+  ${iptables} --table filter --append INPUT \
+    --protocol icmp --match limit \
+    --limit 4/s --limit-burst 8 --jump ACCEPT
+
+  # Accept existing connections
+  ${iptables} --table filter --append INPUT \
+    --match state --state ESTABLISHED,RELATED --jump ACCEPT
+
+  # Accept local connections
+  ${iptables} --table filter --append INPUT \
+    --source ${localhost} --jump ACCEPT
+
+  # Accept ssh
+  ${iptables} --table filter --append INPUT \
+    --protocol tcp --match tcp --dport 22 --jump ACCEPT
+
+  echo "DONE"
+}
+
+function forward
+{
+  local iptables="${1}"
+
+  local wan="ppp0"  # on eth1
+  local lan="eth0"
+  local wifi="wlan0"
+
+  echo -n "Loading '${iptables}' forwarding rules..."
+
+  # Honour MTU (http://lartc.org/howto/lartc.cookbook.mtu-mss.html)
+  ${iptables} --table filter --append FORWARD \
+    --protocol tcp --tcp-flags SYN,RST SYN --jump TCPMSS --clamp-mss-to-pmtu
+
+  # Enable NAT
+  if [ "iptables" == ${iptables} ]; then
+    ${iptables} --table nat --append POSTROUTING \
+      --out-interface ${wan} --jump MASQUERADE
+  fi
+
+  # Forward WIFI -> LAN
+  ${iptables} --table filter --append FORWARD \
+    --in-interface ${wifi} --out-interface ${lan} --jump ACCEPT
+  # Forward LAN -> WIFI
+  ${iptables} --table filter --append FORWARD \
+    --in-interface ${lan} --out-interface ${wifi} --jump ACCEPT
+
+  # Forward LAN -> WAN
+  ${iptables} --table filter --append FORWARD \
+    --in-interface ${lan} --out-interface ${wan} --jump ACCEPT
+  # Forward WIFI -> WAN
+  ${iptables} --table filter --append FORWARD \
+    --in-interface ${wifi} --out-interface ${wan} --jump ACCEPT
+
+  # Forward WAN -> LAN
+  ${iptables} --table filter --append FORWARD \
+    --in-interface ${wan} --out-interface ${lan} --match state \
+    --state ESTABLISHED,RELATED --jump ACCEPT
+  # Forward WAN -> WIFI
+  ${iptables} --table filter --append FORWARD \
+    --in-interface ${wan} --out-interface ${wifi} --match state \
+    --state ESTABLISHED,RELATED --jump ACCEPT
+
+  # Accept connections from the LAN
+  ${iptables} --table filter --append INPUT \
+    --in-interface ${lan} --jump ACCEPT
+  # Accept connections over WIFI
+  ${iptables} --table filter --append INPUT \
+    --in-interface ${wifi} --jump ACCEPT
+
+  echo "DONE"
+}
+
 function load
 {
   local iptables="${1}"
   local localhost="${2}"
 
-  local wanif="ppp0"
-  local lanif="eth0"
-  local wlanif="wlan0"
+  block ${iptables} ${localhost}
+  forward ${iptables}
 
-  echo -n "Loading '${iptables}' rules..."
-  if [ "iptables" == ${iptables} ]; then
-    ${iptables} --table nat --append POSTROUTING \
-      --out-interface ${wanif} --jump MASQUERADE
-  fi
-
-  ${iptables} --table filter --policy FORWARD DROP
-  # Honour MTU
-  ${iptables} --table filter --append FORWARD \
-    --protocol tcp --tcp-flags SYN,RST SYN --jump TCPMSS --clamp-mss-to-pmtu
-  # Forward from the LAN to the WAN
-  ${iptables} --table filter --append FORWARD \
-    --in-interface ${lanif} --out-interface ${wanif} --jump ACCEPT
-  # Forward from the WAN to the LAN
-  ${iptables} --table filter --append FORWARD \
-    --in-interface ${wanif} --out-interface ${lanif} --match state \
-    --state ESTABLISHED,RELATED --jump ACCEPT
-  # Forward from the WLAN to the WAN
-  ${iptables} --table filter --append FORWARD \
-    --in-interface ${wlanif} --out-interface ${wanif} --jump ACCEPT
-  # Forward from the WAN to the WLAN
-  ${iptables} --table filter --append FORWARD \
-    --in-interface ${wanif} --out-interface ${wlanif} --match state \
-    --state ESTABLISHED,RELATED --jump ACCEPT
-
-  ${iptables} --table filter --policy INPUT DROP
-  # Accept SYN requests
-  ${iptables} --table filter --append INPUT \
-    --protocol tcp --syn --match limit \
-    --limit 25/s --limit-burst 50 --jump ACCEPT
-  # Accept pings
-  ${iptables} --table filter --append INPUT \
-    --protocol icmp --match limit \
-    --limit 4/s --limit-burst 8 --jump ACCEPT
-  # Accept existing connections
-  ${iptables} --table filter --append INPUT \
-    --match state --state ESTABLISHED,RELATED --jump ACCEPT
-  # Accept new connections from the LAN
-  ${iptables} --table filter --append INPUT \
-    --in-interface ${lanif} --jump ACCEPT
-  # Accept new connections from the WLAN
-  ${iptables} --table filter --append INPUT \
-    --in-interface ${wlanif} --jump ACCEPT
-  # Accept new local connections
-  ${iptables} --table filter --append INPUT \
-    --source ${localhost} --jump ACCEPT
-  # Accept ssh
-  ${iptables} --table filter --append INPUT \
-    --protocol tcp --match tcp --dport 22 --jump ACCEPT
-  echo "DONE"
 }
 
 function flush
@@ -81,6 +121,7 @@ function flush
   local iptables="${1}"
 
   echo -n "Flushing '${iptables}' rules..."
+
   if [ "iptables" == ${iptables} ]; then
     ${iptables} --table nat --flush POSTROUTING
   fi
@@ -90,6 +131,7 @@ function flush
 
   ${iptables} --table filter --flush INPUT
   ${iptables} --table filter --policy INPUT DROP
+
   echo "DONE"
 }
 
