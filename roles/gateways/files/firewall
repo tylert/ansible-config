@@ -83,7 +83,6 @@ function flush
   echo -n "Flushing '${iptables}' rules..."
   if [ "iptables" == ${iptables} ]; then
     ${iptables} --table nat --flush POSTROUTING
-    ${iptables} --table nat --flush PREROUTING
   fi
 
   ${iptables} --table filter --flush FORWARD
