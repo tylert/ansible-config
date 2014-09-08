@@ -17,77 +17,55 @@ set -e
 
 function load
 {
-  echo -n "Loading IPv4 rules..."
-  iptables --table filter --policy FORWARD DROP
+  local iptables="${1}"
+  local localhost="${2}"
 
-  iptables --table filter --policy INPUT DROP
+  echo -n "Loading '${iptables}' rules..."
+  ${iptables} --table filter --policy FORWARD DROP
+
+  ${iptables} --table filter --policy INPUT DROP
   # Accept SYN requests
-  iptables --table filter --append INPUT \
+  ${iptables} --table filter --append INPUT \
     --protocol tcp --syn --match limit \
     --limit 25/s --limit-burst 50 --jump ACCEPT
   # Accept pings
-  iptables --table filter --append INPUT \
+  ${iptables} --table filter --append INPUT \
     --protocol icmp --match limit \
     --limit 4/s --limit-burst 8 --jump ACCEPT
   # Accept existing connections
-  iptables --table filter --append INPUT \
+  ${iptables} --table filter --append INPUT \
     --match state --state ESTABLISHED,RELATED --jump ACCEPT
   # Accept new local connections
-  iptables --table filter --append INPUT \
-    --source 127.0.0.1 --jump ACCEPT
+  ${iptables} --table filter --append INPUT \
+    --source ${localhost} --jump ACCEPT
   # Accept ssh
-  iptables --table filter --append INPUT \
-    --protocol tcp --match tcp --dport 22 --jump ACCEPT
-  echo "DONE"
-
-  echo -n "Loading IPv6 rules..."
-  ip6tables --table filter --policy FORWARD DROP
-
-  ip6tables --table filter --policy INPUT DROP
-  # Accept SYN requests
-  ip6tables --table filter --append INPUT \
-    --protocol tcp --syn --match limit \
-    --limit 25/s --limit-burst 50 --jump ACCEPT
-  # Accept pings
-  ip6tables --table filter --append INPUT \
-    --protocol icmp --match limit \
-    --limit 4/s --limit-burst 8 --jump ACCEPT
-  # Accept existing connections
-  ip6tables --table filter --append INPUT \
-    --match state --state ESTABLISHED,RELATED --jump ACCEPT
-  # Accept new local connections
-  ip6tables --table filter --append INPUT \
-    --source ::1 --jump ACCEPT
-  # Accept ssh
-  ip6tables --table filter --append INPUT \
+  ${iptables} --table filter --append INPUT \
     --protocol tcp --match tcp --dport 22 --jump ACCEPT
   echo "DONE"
 }
 
 function flush
 {
-  echo -n "Flushing IPv4 rules..."
-  iptables --table filter --policy FORWARD ACCEPT
+  local iptables="${1}"
 
-  iptables --table filter --flush INPUT
-  iptables --table filter --policy INPUT ACCEPT
-  echo "DONE"
+  echo -n "Flushing '${iptables}' rules..."
+  ${iptables} --table filter --policy FORWARD ACCEPT
 
-  echo -n "Flushing IPv6 rules..."
-  ip6tables --table filter --policy FORWARD ACCEPT
-
-  ip6tables --table filter --flush INPUT
-  ip6tables --table filter --policy INPUT ACCEPT
+  ${iptables} --table filter --flush INPUT
+  ${iptables} --table filter --policy INPUT ACCEPT
   echo "DONE"
 }
 
 case "${1}" in
   start|restart)
-    flush
-    load
+    flush iptables
+    load iptables 127.0.0.1
+    flush ip6tables
+    load ip6tables ::1
     ;;
   stop)
-    flush
+    flush iptables
+    flush ip6tables
     ;;
   *)
     echo "Usage:  start|stop|restart."

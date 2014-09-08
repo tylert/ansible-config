@@ -17,135 +17,93 @@ set -e
 
 function load
 {
+  local iptables="${1}"
+  local localhost="${2}"
+
   local wanif="ppp0"
   local lanif="eth0"
   local wlanif="wlan0"
 
-  echo -n "Loading IPv4 rules..."
-  iptables --table nat --append POSTROUTING \
-    --out-interface ${wanif} --jump MASQUERADE
+  echo -n "Loading '${iptables}' rules..."
+  if [ "iptables" == ${iptables} ]; then
+    ${iptables} --table nat --append POSTROUTING \
+      --out-interface ${wanif} --jump MASQUERADE
+  fi
 
-  iptables --table filter --policy FORWARD DROP
+  ${iptables} --table filter --policy FORWARD DROP
   # Honour MTU
-  iptables --table filter --append FORWARD \
+  ${iptables} --table filter --append FORWARD \
     --protocol tcp --tcp-flags SYN,RST SYN --jump TCPMSS --clamp-mss-to-pmtu
   # Forward from the LAN to the WAN
-  iptables --table filter --append FORWARD \
+  ${iptables} --table filter --append FORWARD \
     --in-interface ${lanif} --out-interface ${wanif} --jump ACCEPT
   # Forward from the WAN to the LAN
-  iptables --table filter --append FORWARD \
+  ${iptables} --table filter --append FORWARD \
     --in-interface ${wanif} --out-interface ${lanif} --match state \
     --state ESTABLISHED,RELATED --jump ACCEPT
   # Forward from the WLAN to the WAN
-  iptables --table filter --append FORWARD \
+  ${iptables} --table filter --append FORWARD \
     --in-interface ${wlanif} --out-interface ${wanif} --jump ACCEPT
   # Forward from the WAN to the WLAN
-  iptables --table filter --append FORWARD \
+  ${iptables} --table filter --append FORWARD \
     --in-interface ${wanif} --out-interface ${wlanif} --match state \
     --state ESTABLISHED,RELATED --jump ACCEPT
 
-  iptables --table filter --policy INPUT DROP
+  ${iptables} --table filter --policy INPUT DROP
   # Accept SYN requests
-  iptables --table filter --append INPUT \
+  ${iptables} --table filter --append INPUT \
     --protocol tcp --syn --match limit \
     --limit 25/s --limit-burst 50 --jump ACCEPT
   # Accept pings
-  iptables --table filter --append INPUT \
+  ${iptables} --table filter --append INPUT \
     --protocol icmp --match limit \
     --limit 4/s --limit-burst 8 --jump ACCEPT
   # Accept existing connections
-  iptables --table filter --append INPUT \
+  ${iptables} --table filter --append INPUT \
     --match state --state ESTABLISHED,RELATED --jump ACCEPT
   # Accept new connections from the LAN
-  iptables --table filter --append INPUT \
+  ${iptables} --table filter --append INPUT \
     --in-interface ${lanif} --jump ACCEPT
   # Accept new connections from the WLAN
-  iptables --table filter --append INPUT \
+  ${iptables} --table filter --append INPUT \
     --in-interface ${wlanif} --jump ACCEPT
   # Accept new local connections
-  iptables --table filter --append INPUT \
-    --source 127.0.0.1 --jump ACCEPT
+  ${iptables} --table filter --append INPUT \
+    --source ${localhost} --jump ACCEPT
   # Accept ssh
-  iptables --table filter --append INPUT \
-    --protocol tcp --match tcp --dport 22 --jump ACCEPT
-  echo "DONE"
-
-  echo -n "Loading IPv6 rules..."
-  ip6tables --table filter --policy FORWARD DROP
-  # Honour MTU
-  ip6tables --table filter --append FORWARD \
-    --protocol tcp --tcp-flags SYN,RST SYN --jump TCPMSS --clamp-mss-to-pmtu
-  # Forward from the LAN to the WAN
-  ip6tables --table filter --append FORWARD \
-    --in-interface ${lanif} --out-interface ${wanif} --jump ACCEPT
-  # Forward from the WAN to the LAN
-  ip6tables --table filter --append FORWARD \
-    --in-interface ${wanif} --out-interface ${lanif} --match state \
-    --state ESTABLISHED,RELATED --jump ACCEPT
-  # Forward from the WLAN to the WAN
-  ip6tables --table filter --append FORWARD \
-    --in-interface ${wlanif} --out-interface ${wanif} --jump ACCEPT
-  # Forward from the WAN to the WLAN
-  ip6tables --table filter --append FORWARD \
-    --in-interface ${wanif} --out-interface ${wlanif} --match state \
-    --state ESTABLISHED,RELATED --jump ACCEPT
-
-  ip6tables --table filter --policy INPUT DROP
-  # Accept SYN requests
-  ip6tables --table filter --append INPUT \
-    --protocol tcp --syn --match limit \
-    --limit 25/s --limit-burst 50 --jump ACCEPT
-  # Accept pings
-  ip6tables --table filter --append INPUT \
-    --protocol icmp --match limit \
-    --limit 4/s --limit-burst 8 --jump ACCEPT
-  # Accept existing connections
-  ip6tables --table filter --append INPUT \
-    --match state --state ESTABLISHED,RELATED --jump ACCEPT
-  # Accept new connections from the LAN
-  ip6tables --table filter --append INPUT \
-    --in-interface ${lanif} --jump ACCEPT
-  # Accept new connections from the WLAN
-  ip6tables --table filter --append INPUT \
-    --in-interface ${wlanif} --jump ACCEPT
-  # Accept new local connections
-  ip6tables --table filter --append INPUT \
-    --source ::1 --jump ACCEPT
-  # Accept ssh
-  ip6tables --table filter --append INPUT \
+  ${iptables} --table filter --append INPUT \
     --protocol tcp --match tcp --dport 22 --jump ACCEPT
   echo "DONE"
 }
 
 function flush
 {
-  echo -n "Flushing IPv4 rules..."
-  iptables --table nat --flush POSTROUTING
-  iptables --table nat --flush PREROUTING
+  local iptables="${1}"
 
-  iptables --table filter --flush FORWARD
-  iptables --table filter --policy FORWARD DROP
+  echo -n "Flushing '${iptables}' rules..."
+  if [ "iptables" == ${iptables} ]; then
+    ${iptables} --table nat --flush POSTROUTING
+    ${iptables} --table nat --flush PREROUTING
+  fi
 
-  iptables --table filter --flush INPUT
-  iptables --table filter --policy INPUT DROP
-  echo "DONE"
+  ${iptables} --table filter --flush FORWARD
+  ${iptables} --table filter --policy FORWARD DROP
 
-  echo -n "Flushing IPv6 rules..."
-  ip6tables --table filter --flush FORWARD
-  ip6tables --table filter --policy FORWARD DROP
-
-  ip6tables --table filter --flush INPUT
-  ip6tables --table filter --policy INPUT DROP
+  ${iptables} --table filter --flush INPUT
+  ${iptables} --table filter --policy INPUT DROP
   echo "DONE"
 }
 
 case "${1}" in
   start|restart)
-    flush
-    load
+    flush iptables
+    load iptables 127.0.0.1
+    flush ip6tables
+    load ip6tables ::1
     ;;
   stop)
-    flush
+    flush iptables
+    flush ip6tables
     ;;
   *)
     echo "Usage:  start|stop|restart."
