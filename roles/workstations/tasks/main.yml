@@ -1,8 +1,8 @@
 ---
-#- include: gqrx.yml
-#- include: heimdall.yml
 - include: firewall.yml
 - include: hibernate.yml
+#- include: gqrx.yml
+#- include: heimdall.yml
 
 - name: Install useful clicky packages
   apt: pkg="{{ item }}" state=present

@@ -21,40 +21,46 @@ function load
   iptables --table filter --policy FORWARD DROP
 
   iptables --table filter --policy INPUT DROP
-  # SYN requests
-  iptables --table filter --append INPUT --protocol tcp --syn --match limit \
+  # Accept SYN requests
+  iptables --table filter --append INPUT \
+    --protocol tcp --syn --match limit \
     --limit 25/s --limit-burst 50 --jump ACCEPT
-  # ping
-  iptables --table filter --append INPUT --protocol icmp --match limit \
+  # Accept pings
+  iptables --table filter --append INPUT \
+    --protocol icmp --match limit \
     --limit 4/s --limit-burst 8 --jump ACCEPT
-  # ssh
-  iptables --table filter --append INPUT --protocol tcp --match tcp \
-    --dport 22 --jump ACCEPT
-  # Existing connections
-  iptables --table filter --append INPUT --match state \
-    --state ESTABLISHED,RELATED --jump ACCEPT
-  # New connections
-  iptables --table filter --append INPUT --source 127.0.0.1 --jump ACCEPT
+  # Accept existing connections
+  iptables --table filter --append INPUT \
+    --match state --state ESTABLISHED,RELATED --jump ACCEPT
+  # Accept new local connections
+  iptables --table filter --append INPUT \
+    --source 127.0.0.1 --jump ACCEPT
+  # Accept ssh
+  iptables --table filter --append INPUT \
+    --protocol tcp --match tcp --dport 22 --jump ACCEPT
   echo "DONE"
 
   echo -n "Loading IPv6 rules..."
   ip6tables --table filter --policy FORWARD DROP
 
   ip6tables --table filter --policy INPUT DROP
-  # SYN requests
-  ip6tables --table filter --append INPUT --protocol tcp --syn --match limit \
+  # Accept SYN requests
+  ip6tables --table filter --append INPUT \
+    --protocol tcp --syn --match limit \
     --limit 25/s --limit-burst 50 --jump ACCEPT
-  # ping
-  ip6tables --table filter --append INPUT --protocol icmp --match limit \
+  # Accept pings
+  ip6tables --table filter --append INPUT \
+    --protocol icmp --match limit \
     --limit 4/s --limit-burst 8 --jump ACCEPT
-  # ssh
-  ip6tables --table filter --append INPUT --protocol tcp --match tcp \
-    --dport 22 --jump ACCEPT
-  # Existing connections
-  ip6tables --table filter --append INPUT --match state \
-    --state ESTABLISHED,RELATED --jump ACCEPT
-  # New connections
-  ip6tables --table filter --append INPUT --source ::1 --jump ACCEPT
+  # Accept existing connections
+  ip6tables --table filter --append INPUT \
+    --match state --state ESTABLISHED,RELATED --jump ACCEPT
+  # Accept new local connections
+  ip6tables --table filter --append INPUT \
+    --source ::1 --jump ACCEPT
+  # Accept ssh
+  ip6tables --table filter --append INPUT \
+    --protocol tcp --match tcp --dport 22 --jump ACCEPT
   echo "DONE"
 }
 
