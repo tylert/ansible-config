@@ -1,3 +1,13 @@
+Calculate the r2q value for traffic control script???
+  MTU=1470
+  MIN_RATE=10
+  UPRATE=650
+  RTOQ_U=$(($MIN_RATE*$UPRATE*10/(8*$MTU)))
+  [ $RTOQ_U -gt 20 ] && RTOQ_U=20
+  [ $RTOQ_U -eq 0 ] && RTOQ_U=1
+
+---
+
 abook
 arduino
 asymptote
@@ -9,7 +19,6 @@ gparted
 make
 mcomix
 meld
-owx
 pdftk
 psutils
 pwgen
@@ -37,18 +46,6 @@ Virtualization
 qemu-kvm
 qemu-utils
 virtualbox
-
-Heimdall
----
-pkg-config
-zlib1g-dev
-libusb++-dev
-libusb-dev
-libusb-1.0-0-dev
-libqt4-dev
-qt4-qmake
-autoconf
-libtool
 
 Android
 ---

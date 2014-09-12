@@ -1,3 +1,9 @@
 ---
 - name: Restart firewall
   command: /etc/firewall restart
+
+- name: Restart traffic control
+  command: /etc/traffic_control restart
+
+- name: Restart dnsmasq
+  service: name=dnsmasq state=restarted

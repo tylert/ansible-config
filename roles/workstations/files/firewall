@@ -22,31 +22,31 @@ function block
 
   echo -n "Loading '${iptables}' blocking rules..."
 
-  # Be more picky about what we forward
+  # Be more picky about what we forward.
   ${iptables} --table filter --policy FORWARD DROP
 
-  # Be more picky about what we allow
+  # Be more picky about what we allow.
   ${iptables} --table filter --policy INPUT DROP
 
-  # Attempt to protect against SYN flooding
+  # Attempt to protect against SYN flooding.
   ${iptables} --table filter --append INPUT \
     --protocol tcp --syn --match limit \
     --limit 25/s --limit-burst 50 --jump ACCEPT
 
-  # Accept a few pings
+  # Accept a few pings.
   ${iptables} --table filter --append INPUT \
     --protocol icmp --match limit \
     --limit 4/s --limit-burst 8 --jump ACCEPT
 
-  # Accept existing connections
+  # Accept existing connections.
   ${iptables} --table filter --append INPUT \
     --match state --state ESTABLISHED,RELATED --jump ACCEPT
 
-  # Accept local connections
+  # Accept local connections.
   ${iptables} --table filter --append INPUT \
     --source ${localhost} --jump ACCEPT
 
-  # Accept ssh
+  # Accept ssh.
   ${iptables} --table filter --append INPUT \
     --protocol tcp --match tcp --dport 22 --jump ACCEPT
 
@@ -82,10 +82,12 @@ case "${1}" in
     flush ip6tables
     load ip6tables ::1
     ;;
+
   stop)
     flush iptables
     flush ip6tables
     ;;
+
   *)
     echo "Usage:  start|stop|restart."
     ;;

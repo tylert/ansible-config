@@ -1,0 +1,142 @@
+#!/usr/bin/env bash
+
+set -e
+
+# tos field bit masks (full byte tos;  includes precedence and mbz lsb)
+#   0x00  normal
+#   0x02  minimize-cost
+#   0x04  maximize-reliability
+#   0x08  maximize-throughput
+#   0x10  minimize-delay
+
+# http://lartc.org/howto/lartc.cookbook.ultimate-tc.html
+# http://lartc.org/howto/lartc.cookbook.fullnat.intro.html
+
+wan="ppp0"
+
+function load
+{
+  local downbw="15000"  # download ceiling in kbps
+  local upbw="10000"  # upload ceiling in kbps
+
+  local voipbw=$((${upbw} * 1/100))                  #  1% of upbw in kbps
+  local highbw=$((${upbw} * 25/100))                 # 25% of upbw in kbps
+  local normbw=$((${upbw} - ${voipbw} - ${highbw}))  # 74% of upbw in kbps
+
+  echo -n "Loading ingress QoS rules..."
+
+  tc qdisc add dev ${wan} handle ffff: ingress
+  tc filter add dev ${wan} parent ffff: protocol ip prio 50 u32 \
+    match ip src 0.0.0.0/0 police rate ${downbw}kbit burst 10k drop \
+    flowid :1
+
+  echo "DONE"
+
+  echo -n "Loading egress QoS rules..."
+
+  # default -> norm (and shape everything to try to keep modem queuing happy).
+  tc qdisc add dev ${wan} root handle 1:0 htb default 30 r2q 2
+  tc class add dev ${wan} parent 1:0 classid 1:1 \
+    htb rate ${upbw}kbit ceil ${upbw}kbit
+
+  # Create the various traffic tiers.
+  tc class add dev ${wan} parent 1:1 classid 1:10 \
+    htb rate ${voipbw}kbit ceil $((3 * ${voipbw}))kbit prio 0
+  tc class add dev ${wan} parent 1:1 classid 1:20 \
+    htb rate ${highbw}kbit ceil ${upbw}kbit prio 1
+  tc class add dev ${wan} parent 1:1 classid 1:30 \
+    htb rate ${normbw}kbit ceil ${upbw}kbit prio 2
+
+  # Ensure that traffic within each tier gets handled fairly.
+  tc qdisc add dev ${wan} parent 1:10 handle 10:0 sfq perturb 10
+  tc qdisc add dev ${wan} parent 1:20 handle 20:0 sfq perturb 10
+  tc qdisc add dev ${wan} parent 1:30 handle 30:0 sfq perturb 10
+
+  # iax -> voip.
+  tc filter add dev ${wan} \
+    parent 1:0 protocol ip prio 10 u32 \
+    match ip dport 4569 0xffff flowid 1:10
+
+  # sip -> voip.
+  tc filter add dev ${wan} \
+    parent 1:0 protocol ip prio 10 u32 \
+    match ip dport 5060 0xffff flowid 1:10
+
+  # smtp -> high.
+  tc filter add dev ${wan} \
+    parent 1:0 protocol ip prio 10 u32 \
+    match ip dport 25 0xffff flowid 1:20
+  tc filter add dev ${wan} \
+    parent 1:0 protocol ip prio 10 u32 \
+    match ip sport 25 0xffff flowid 1:20
+
+  # submission -> high.
+  tc filter add dev ${wan} \
+    parent 1:0 protocol ip prio 10 u32 \
+    match ip dport 587 0xffff flowid 1:20
+  tc filter add dev ${wan} \
+    parent 1:0 protocol ip prio 10 u32 \
+    match ip sport 587 0xffff flowid 1:20
+
+  # imaps -> high.
+  tc filter add dev ${wan} \
+    parent 1:0 protocol ip prio 10 u32 \
+    match ip dport 993 0xffff flowid 1:20
+
+  # icmp -> high.
+  tc filter add dev ${wan} \
+    parent 1:0 protocol ip prio 10 u32 \
+    match ip protocol 1 0xff flowid 1:20
+
+  # tcp acks -> high.
+  tc filter add dev ${wan} \
+    parent 1:0 protocol ip prio 10 u32 \
+    match ip protocol 6 0xff \
+    match u8 0x05 0x0f at 0 \
+    match u16 0x0000 0xffc0 at 2 \
+    match u8 0x10 0xff at 33 \
+    flowid 1:20
+
+  # ssh (minimize-delay) -> high.
+  tc filter add dev ${wan} \
+    parent 1:0 protocol ip prio 10 u32 \
+    match ip tos 0x10 0xff flowid 1:20
+
+  echo "DONE"
+}
+
+function flush
+{
+  echo -n "Flushing ingress QoS rules..."
+
+  tc qdisc del dev ${wan} ingress
+
+  echo "DONE"
+
+  echo -n "Flushing egress QoS rules..."
+
+  tc qdisc del dev ${wan} root
+
+  echo "DONE"
+}
+
+case "${1}" in
+  start)
+    load
+    ;;
+
+  restart)
+    flush
+    load
+    ;;
+
+  stop)
+    flush
+    ;;
+
+  *)
+    echo "Usage:  start|stop|restart."
+    ;;
+esac
+
+exit 0
