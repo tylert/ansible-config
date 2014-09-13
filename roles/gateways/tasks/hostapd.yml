@@ -1,0 +1,11 @@
+---
+- name: Copy hostapd config
+  template: src=hostapd.conf.j2 dest=/etc/hostapd/site.conf
+            owner=root group=root mode=0644
+  notify: Restart hostapd
+
+- name: Enable hostapd config
+  lineinfile: dest=/etc/default/hostapd state=present
+              line='DAEMON_CONF="/etc/hostapd/site.conf"'
+              insertafter='^#DAEMON_CONF='
+  notify: Restart hostapd
