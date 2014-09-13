@@ -10,12 +10,12 @@
     - hostapd
 
 - name: Copy dnsmasq config
-  copy: src=dnsmasq.conf dest=/etc/dnsmasq.d/site.conf
+  template: src=dnsmasq.conf.j2 dest=/etc/dnsmasq.d/site.conf
         owner=root group=root mode=0644
   notify: Restart dnsmasq
 
 - name: Copy hostapd config
-  copy: src=hostapd.conf dest=/etc/hostapd/site.conf
+  template: src=hostapd.conf.j2 dest=/etc/hostapd/site.conf
         owner=root group=root mode=0644
   notify: Restart hostapd
 
