@@ -6,9 +6,8 @@
 - name: Disable password login for the ghost user
   user: name=ghost password='!' state=present
 
-- name: dist-upgrade
-  apt: upgrade=dist
-#  apt: update_cache=yes upgrade=dist
+- name: Perform a dist-upgrade
+  apt: update_cache=yes upgrade=dist cache_valid_time=86400
 
 - name: Install some essential administration packages needed on all machines
   apt: pkg="{{ item }}" state=present
