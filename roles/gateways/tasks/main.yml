@@ -13,3 +13,19 @@
   copy: src=dnsmasq.conf dest=/etc/dnsmasq.d/site.conf
         owner=root group=root mode=0644
   notify: Restart dnsmasq
+
+- name: Copy hostapd config
+  copy: src=hostapd.conf dest=/etc/hostapd/site.conf
+        owner=root group=root mode=0644
+  notify: Restart hostapd
+
+- name: Enable hostapd config
+  lineinfile: dest=/etc/default/hostapd state=present
+              line='DAEMON_CONF="/etc/hostapd/site.conf"'
+              insertafter='^#DAEMON_CONF='
+  notify: Restart hostapd
+
+- name: Turn on forwarding
+  lineinfile: dest=/etc/sysctl.d/local.conf state=present create=yes
+              line='net.ipv4.ip_forward=1\n#net.ipv6.conf.all.forwarding=1'
+  notify: Restart procps
