@@ -58,8 +58,8 @@ function forward
   local iptables="${1}"
 
   local wan="ppp0"  # on eth1
-  local lan="eth0"
-  local wifi="wlan0"
+  local lan="{{ lan_interface_name }}"
+  local wifi="{{ wifi_interface_name }}"
 
   echo -n "Loading '${iptables}' forwarding rules..."
 
