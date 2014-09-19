@@ -1,0 +1,4 @@
+---
+- name: Install adb
+  apt: pkg=android-tools-adb state=present
+  when: ansible_distribution == 'Ubuntu'

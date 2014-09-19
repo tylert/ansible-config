@@ -1,8 +1,8 @@
 ---
-- name: Add chirp daily repository
+- name: Add chirp-daily repository
   apt_repository: repo='ppa:dansmith/chirp-snapshots'
   when: ansible_distribution == 'Ubuntu'
 
-- name: Add chirp daily package
+- name: Install chirp-daily
   apt: pkg=chirp-daily state=present
   when: ansible_distribution == 'Ubuntu'
