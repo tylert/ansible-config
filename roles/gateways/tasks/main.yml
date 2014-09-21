@@ -1,14 +1,13 @@
 ---
 - include: firewall.yml
+- include: dnsmasq.yml
+- include: hostapd.yml
 
 - name: Install gateway packages
   apt: pkg="{{ item }}" state=present
   with_items:
     - pppoeconf
     - wireless-tools
-    - hostapd
-
-- include: hostapd.yml
 
 - name: Turn on forwarding
   lineinfile: dest=/etc/sysctl.d/local.conf state=present create=yes

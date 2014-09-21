@@ -1,4 +1,7 @@
 ---
+- name: Install hostapd
+  apt: pkg=hostapd state=present
+
 - name: Copy hostapd config
   template: src=hostapd.conf.j2 dest=/etc/hostapd/site.conf
             owner=root group=root mode=0644
