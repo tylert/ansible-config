@@ -1,6 +1,8 @@
 ---
 - include: firewall.yml
 - include: hibernate.yml
+
+- include: web_browser.yml
 - include: libreoffice.yml
 
 #- include: adb.yml
@@ -25,7 +27,6 @@
 - name: Install other Ubuntu packages
   apt: pkg={{ item }} state=present
   with_items:
-    - firefox
     - thunderbird
     - enigmail
   when: ansible_distribution == 'Ubuntu'
@@ -33,7 +34,6 @@
 - name: Install other Debian packages
   apt: pkg={{ item }} state=present
   with_items:
-    - iceweasel
     - icedove
     - enigmail
   when: ansible_distribution == 'Debian'

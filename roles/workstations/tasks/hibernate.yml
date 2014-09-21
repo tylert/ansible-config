@@ -2,3 +2,5 @@
 - name: Re-enable hibernate
   copy: src=com.ubuntu.enable-hibernate.pkla
         dest=/var/lib/polkit-1/localauthority/50-local.d/com.ubuntu.enable-hibernate.pkla
+  when: ansible_distribution == 'Ubuntu'
+
