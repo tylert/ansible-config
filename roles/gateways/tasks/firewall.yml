@@ -5,8 +5,8 @@
   notify: Restart firewall
 
 - name: Make sure the firewall script gets run at boot time
-  lineinfile: dest=/etc/rc.local state=present
-              line='/etc/firewall start' insertbefore='exit 0'
+  lineinfile: dest=/etc/rc.local insertbefore='exit 0'
+              line='/etc/firewall start'
 
 - name: Copy over the traffic control script
   copy: src=traffic_control dest=/etc/traffic_control
@@ -14,5 +14,5 @@
 #  notify: Restart traffic control
 
 - name: Make sure the traffic control script gets run at boot time
-  lineinfile: dest=/etc/rc.local state=present
-              line='/etc/traffic_control start' insertbefore='exit 0'
+  lineinfile: dest=/etc/rc.local insertbefore='exit 0'
+              line='/etc/traffic_control start'

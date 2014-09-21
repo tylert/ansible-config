@@ -1,5 +1,4 @@
 [defaults]
-
 hostfile = inventory
 
 remote_user = ghost
