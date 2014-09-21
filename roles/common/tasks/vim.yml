@@ -1,0 +1,9 @@
+---
+- name: Install vim
+  apt: pkg={{ item }} state=present
+  with_items:
+    - vim
+    - vim-scripts
+
+- name: Cull nano
+  apt: pkg=nano state=absent purge=yes

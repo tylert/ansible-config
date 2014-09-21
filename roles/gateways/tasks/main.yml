@@ -4,7 +4,7 @@
 - include: hostapd.yml
 
 - name: Install gateway packages
-  apt: pkg="{{ item }}" state=present
+  apt: pkg={{ item }} state=present
   with_items:
     - pppoeconf
     - wireless-tools

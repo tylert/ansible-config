@@ -1,6 +1,7 @@
 ---
 - name: Copy over the firewall script
-  template: src=firewall.j2 dest=/etc/firewall owner=root group=root mode=0755
+  template: src=firewall.j2 dest=/etc/firewall
+            owner=root group=root mode=0755
   notify: Restart firewall
 
 - name: Make sure the firewall script gets run at boot time
