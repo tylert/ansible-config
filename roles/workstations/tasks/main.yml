@@ -1,10 +1,13 @@
 ---
 - include: firewall.yml
 - include: hibernate.yml
-#- include: gqrx.yml
+- include: libreoffice.yml
+
+#- include: adb.yml
 #- include: heimdall.yml
 
-- include: libreoffice.yml
+#- include: chirp-daily.yml
+#- include: gqrx.yml
 
 - name: Install useful clicky packages
   apt: pkg={{ item }} state=present

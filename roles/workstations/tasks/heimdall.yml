@@ -4,4 +4,3 @@
   with_items:
     - heimdall-flash
     - heimdall-flash-frontend
-  when: ansible_distribution == 'Ubuntu'
