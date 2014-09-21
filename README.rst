@@ -8,3 +8,5 @@ ansible-management
     --limit=pinky,brain \
     --sudo --ask-sudo-pass \
     --skip-tags=upgrade
+
+https://learn.adafruit.com/raspberry-pi-as-an-ad-blocking-access-point?view=all

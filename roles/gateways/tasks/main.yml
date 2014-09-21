@@ -5,16 +5,10 @@
   apt: pkg="{{ item }}" state=present
   with_items:
     - pppoeconf
-    - dnsmasq
     - wireless-tools
     - hostapd
 
 - include: hostapd.yml
-
-- name: Copy dnsmasq config
-  template: src=dnsmasq.conf.j2 dest=/etc/dnsmasq.d/site.conf
-        owner=root group=root mode=0644
-  notify: Restart dnsmasq
 
 - name: Turn on forwarding
   lineinfile: dest=/etc/sysctl.d/local.conf state=present create=yes

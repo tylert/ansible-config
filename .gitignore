@@ -1,2 +1,5 @@
 *.sw?
 ghost_id_rsa
+ghost_id_rsa.pub
+inventory
+ansible.cfg
