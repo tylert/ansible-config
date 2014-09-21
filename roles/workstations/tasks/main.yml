@@ -4,14 +4,14 @@
 #- include: gqrx.yml
 #- include: heimdall.yml
 
+- include: libreoffice.yml
+
 - name: Install useful clicky packages
   apt: pkg={{ item }} state=present
   with_items:
     - gitk
     - build-essential
     - keepassx
-    - libreoffice
-    - libreoffice-pdfimport
     - librecad
     - inkscape
 #    - blender
