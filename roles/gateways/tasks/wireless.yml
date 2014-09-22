@@ -1,0 +1,9 @@
+---
+- name: Add non-free repos
+  apt_repository:
+
+- name: Install wireless tools and drivers
+  apt: pkg={{ item }} state=present
+  with_items:
+    - wireless-tools
+    - firmware-ralink
