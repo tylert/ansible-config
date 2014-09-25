@@ -57,7 +57,7 @@ function forward
 {
   local iptables="${1}"
 
-  local wan="ppp0"  # on eth1
+  local wan="{{ wan_interface_name }}"  # on {{ wan_real_interface_name }}
   local lan="{{ lan_interface_name }}"
   local wifi="{{ wifi_interface_name }}"
 
