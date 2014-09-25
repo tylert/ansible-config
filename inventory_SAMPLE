@@ -1,12 +1,7 @@
 [workstations]
-radish type=developer
+radish
 parsnip
 turnip
 
 [gateways]
 milena
-
-#delta
-#gamma
-#sigma
-#ratchet
