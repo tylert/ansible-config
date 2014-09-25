@@ -3,5 +3,4 @@
   apt: pkg=sshfs state=present
 
 - name: Correct fuse options
-  lineinfile: dest=/etc/fuse.conf insertafter='^#user_allow_other'
-              line='user_allow_other'
+  lineinfile: dest=/etc/fuse.conf line='user_allow_other'
