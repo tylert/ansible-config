@@ -24,7 +24,6 @@ psutils
 pwgen
 quvi
 sed
-sshfs
 strace
 ufraw-batch
 units
