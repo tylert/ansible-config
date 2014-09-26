@@ -1,7 +1,9 @@
 ---
 
 - name: Add non-free repos
-  apt_repository:
+  template: src=sources.j2 dest=/etc/apt/sources.list
+            owner=root group=root mode=0644
+  notify: Update apt cache
 
 - name: Install wireless tools and drivers
   apt: pkg={{ item }} state=present

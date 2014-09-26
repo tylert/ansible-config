@@ -1,11 +1,11 @@
 ---
 
-- name: Copy firewall script
+- name: Install firewall
   template: src=firewall.j2 dest=/etc/firewall
             owner=root group=root mode=0755
   notify: Restart firewall
 
-- name: Enable firewall script
+- name: Enable firewall
   lineinfile: dest=/etc/rc.local insertbefore='exit 0'
               line='/etc/firewall start' state=present
 

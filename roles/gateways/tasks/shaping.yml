@@ -1,10 +1,10 @@
 ---
 
-- name: Copy shaping script
+- name: Install shaping
   template: src=shaping.j2 dest=/etc/shaping
             owner=root group=root mode=0755
   notify: Restart shaping
 
-- name: Enable shaping script
+- name: Enable shaping
   lineinfile: dest=/etc/rc.local insertbefore='exit 0'
               line='/etc/shaping start' state=present

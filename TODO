@@ -8,6 +8,11 @@ Calculate the r2q value for traffic control script???
 
 ---
 
+Fix wireless.yml to update cache BEFORE trying to install wireless packages
+from the non-free repo.
+
+---
+
 abook
 arduino
 asymptote

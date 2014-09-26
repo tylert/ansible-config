@@ -14,3 +14,6 @@
 
 - name: Restart shaping
   command: /etc/shaping restart
+
+- name: Update apt cache
+  apt: update_cache=yes
