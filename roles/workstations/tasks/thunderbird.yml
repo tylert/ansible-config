@@ -1,12 +1,13 @@
 ---
-- name: Install other Ubuntu packages
+
+- name: Install thunderbird
   apt: pkg={{ item }} state=present
   with_items:
     - thunderbird
     - enigmail
   when: ansible_distribution == 'Ubuntu'
 
-- name: Install other Debian packages
+- name: Install icedove
   apt: pkg={{ item }} state=present
   with_items:
     - icedove

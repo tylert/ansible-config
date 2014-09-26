@@ -1,4 +1,5 @@
 ---
+
 - name: Install firefox
   apt: pkg=firefox state=present
   when: ansible_distribution == 'Ubuntu'

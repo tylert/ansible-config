@@ -1,4 +1,5 @@
 ---
+
 - name: Turn off sudo passwords for members of the ghost group
   lineinfile: dest=/etc/sudoers.d/99-ghost create=yes
               line='%ghost ALL=(ALL) NOPASSWD:ALL' state=present

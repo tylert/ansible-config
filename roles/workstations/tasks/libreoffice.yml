@@ -1,4 +1,5 @@
 ---
+
 - name: Install libreoffice
   apt: pkg={{ item }} state=present
   with_items:

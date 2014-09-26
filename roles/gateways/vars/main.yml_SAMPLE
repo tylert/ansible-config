@@ -1,4 +1,5 @@
 ---
+
 ssid: youraccesspointname
 wpa_passphrase: yourwifipassword
 domain_name: yourdomain

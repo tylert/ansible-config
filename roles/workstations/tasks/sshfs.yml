@@ -1,4 +1,5 @@
 ---
+
 - name: Install sshfs
   apt: pkg=sshfs state=present
 

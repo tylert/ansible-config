@@ -1,3 +1,4 @@
 ---
+
 - include: workstations.yml
 - include: gateways.yml

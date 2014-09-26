@@ -1,4 +1,5 @@
 ---
+
 - name: Add chirp-daily repository
   apt_repository: repo='ppa:dansmith/chirp-snapshots'
                   update_cache=yes state=present

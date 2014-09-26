@@ -1,4 +1,5 @@
 ---
+
 - name: Install hostapd
   apt: pkg=hostapd state=present
 

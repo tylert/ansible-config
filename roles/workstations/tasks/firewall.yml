@@ -1,4 +1,5 @@
 ---
+
 - name: Copy over the firewall script
   copy: src=firewall dest=/etc/firewall
         owner=root group=root mode=0755

@@ -1,21 +1,28 @@
 ---
-- name: Copy over the firewall script
+
+# iptables stuff
+
+- name: Copy firewall config
   template: src=firewall.j2 dest=/etc/firewall
             owner=root group=root mode=0755
   notify: Restart firewall
 
-- name: Make sure the firewall script gets run at boot time
+- name: Enable firewall config
   lineinfile: dest=/etc/rc.local insertbefore='exit 0'
               line='/etc/firewall start' state=present
 
-- name: Copy over the traffic control script
+# tc stuff
+
+- name: Copy traffic control config
   copy: src=traffic_control dest=/etc/traffic_control
         owner=root group=root mode=0755
 #  notify: Restart traffic control
 
-- name: Make sure the traffic control script gets run at boot time
+- name: Enable traffic control config
   lineinfile: dest=/etc/rc.local insertbefore='exit 0'
               line='/etc/traffic_control start' state=present
+
+# sysctl stuff
 
 - name: Enable IPv4 forwarding
   lineinfile: dest=/etc/sysctl.d/local.conf create=yes
