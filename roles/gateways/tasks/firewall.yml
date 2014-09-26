@@ -2,23 +2,23 @@
 
 # iptables stuff
 
-- name: Copy firewall config
+- name: Copy firewall script
   template: src=firewall.j2 dest=/etc/firewall
             owner=root group=root mode=0755
   notify: Restart firewall
 
-- name: Enable firewall config
+- name: Enable firewall script
   lineinfile: dest=/etc/rc.local insertbefore='exit 0'
               line='/etc/firewall start' state=present
 
 # tc stuff
 
-- name: Copy traffic control config
-  copy: src=traffic_control dest=/etc/traffic_control
-        owner=root group=root mode=0755
-#  notify: Restart traffic control
+- name: Copy traffic control script
+  template: src=traffic_control.j2 dest=/etc/traffic_control
+            owner=root group=root mode=0755
+  notify: Restart traffic control
 
-- name: Enable traffic control config
+- name: Enable traffic control script
   lineinfile: dest=/etc/rc.local insertbefore='exit 0'
               line='/etc/traffic_control start' state=present
 

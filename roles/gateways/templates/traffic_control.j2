@@ -12,12 +12,12 @@ set -e
 # http://lartc.org/howto/lartc.cookbook.ultimate-tc.html
 # http://lartc.org/howto/lartc.cookbook.fullnat.intro.html
 
-wan="ppp0"
+wan="{{ wan_interface_name }}"
 
 function load
 {
-  local downbw="15000"  # download ceiling in kbps
-  local upbw="10000"  # upload ceiling in kbps
+  local downbw="{{ wan_downbw_kbps }}"  # download ceiling in kbps
+  local upbw="{{ wan_upbw_kbps }}"  # upload ceiling in kbps
 
   local voipbw=$((${upbw} * 1/100))                  #  1% of upbw in kbps
   local highbw=$((${upbw} * 25/100))                 # 25% of upbw in kbps
