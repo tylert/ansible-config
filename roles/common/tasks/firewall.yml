@@ -12,11 +12,11 @@
 - name: Enable IPv4 forwarding
   lineinfile: dest=/etc/sysctl.d/local.conf create=yes
               line='net.ipv4.ip_forward=1' state=present
-#  when: 'gateways' in group_names
+  when: gateway
   notify: Restart procps
 
 - name: Enable IPv6 forwarding
   lineinfile: dest=/etc/sysctl.d/local.conf create=yes
               line='net.ipv6.conf.all.forwarding=1' state=present
-#  when: 'gateways' in group_names
+  when: gateway
   notify: Restart procps
