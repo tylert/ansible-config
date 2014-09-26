@@ -18,3 +18,5 @@ wifi_interface_netmask: 255.255.255.0
 
 wan_interface_name: ppp0
 wan_real_interface_name: eth1
+wan_downbw_kbps: 6000  # 6 Mbps
+wan_upbw_kbps: 800  # 0.8 Mbps
