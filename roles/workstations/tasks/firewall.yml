@@ -6,4 +6,4 @@
 
 - name: Make sure the firewall script gets run at boot time
   lineinfile: dest=/etc/rc.local insertbefore='exit 0'
-              line='/etc/firewall start'
+              line='/etc/firewall start' state=present

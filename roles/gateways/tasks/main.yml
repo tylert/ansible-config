@@ -9,9 +9,3 @@
   with_items:
     - pppoeconf
     - wireless-tools
-
-- name: Turn on forwarding
-  lineinfile: dest=/etc/sysctl.d/local.conf state=present create=yes
-              line='net.ipv4.ip_forward=1'
-  notify: Restart procps
-#net.ipv6.conf.all.forwarding=1

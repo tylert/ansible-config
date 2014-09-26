@@ -8,7 +8,7 @@
   notify: Restart hostapd
 
 - name: Enable hostapd config
-  lineinfile: dest=/etc/default/hostapd state=present
+  lineinfile: dest=/etc/default/hostapd
               line='DAEMON_CONF="/etc/hostapd/site.conf"'
-              insertafter='^#DAEMON_CONF='
+              insertafter='^#DAEMON_CONF=' state=present
   notify: Restart hostapd

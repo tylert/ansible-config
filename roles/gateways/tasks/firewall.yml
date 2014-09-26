@@ -6,7 +6,7 @@
 
 - name: Make sure the firewall script gets run at boot time
   lineinfile: dest=/etc/rc.local insertbefore='exit 0'
-              line='/etc/firewall start'
+              line='/etc/firewall start' state=present
 
 - name: Copy over the traffic control script
   copy: src=traffic_control dest=/etc/traffic_control
@@ -15,4 +15,14 @@
 
 - name: Make sure the traffic control script gets run at boot time
   lineinfile: dest=/etc/rc.local insertbefore='exit 0'
-              line='/etc/traffic_control start'
+              line='/etc/traffic_control start' state=present
+
+- name: Enable IPv4 forwarding
+  lineinfile: dest=/etc/sysctl.d/local.conf create=yes
+              line='net.ipv4.ip_forward=1' state=present
+  notify: Restart procps
+
+- name: Enable IPv6 forwarding
+  lineinfile: dest=/etc/sysctl.d/local.conf create=yes
+              line='net.ipv6.conf.all.forwarding=1' state=present
+  notify: Restart procps
