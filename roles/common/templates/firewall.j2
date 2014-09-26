@@ -46,10 +46,12 @@ function block
   ${iptables} --table filter --append INPUT \
     --source ${localhost} --jump ACCEPT
 
+{% if 'gateways' not in group_names %}
   # Accept ssh.
   ${iptables} --table filter --append INPUT \
     --protocol tcp --match tcp --dport 22 --jump ACCEPT
 
+{% endif %}
   echo "DONE"
 }
 
@@ -112,8 +114,9 @@ function load
   local localhost="${2}"
 
   block ${iptables} ${localhost}
+{% if 'gateways' in group_names %}
   forward ${iptables}
-
+{% endif %}
 }
 
 function flush

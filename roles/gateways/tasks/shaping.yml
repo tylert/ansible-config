@@ -1,0 +1,10 @@
+---
+
+- name: Copy shaping script
+  template: src=traffic_control.j2 dest=/etc/traffic_control
+            owner=root group=root mode=0755
+  notify: Restart traffic control
+
+- name: Enable shaping script
+  lineinfile: dest=/etc/rc.local insertbefore='exit 0'
+              line='/etc/traffic_control start' state=present

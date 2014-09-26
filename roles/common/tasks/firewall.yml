@@ -1,7 +1,5 @@
 ---
 
-# iptables stuff
-
 - name: Copy firewall script
   template: src=firewall.j2 dest=/etc/firewall
             owner=root group=root mode=0755
@@ -11,25 +9,14 @@
   lineinfile: dest=/etc/rc.local insertbefore='exit 0'
               line='/etc/firewall start' state=present
 
-# tc stuff
-
-- name: Copy traffic control script
-  template: src=traffic_control.j2 dest=/etc/traffic_control
-            owner=root group=root mode=0755
-  notify: Restart traffic control
-
-- name: Enable traffic control script
-  lineinfile: dest=/etc/rc.local insertbefore='exit 0'
-              line='/etc/traffic_control start' state=present
-
-# sysctl stuff
-
 - name: Enable IPv4 forwarding
   lineinfile: dest=/etc/sysctl.d/local.conf create=yes
               line='net.ipv4.ip_forward=1' state=present
+#  when: 'gateways' in group_names
   notify: Restart procps
 
 - name: Enable IPv6 forwarding
   lineinfile: dest=/etc/sysctl.d/local.conf create=yes
               line='net.ipv6.conf.all.forwarding=1' state=present
+#  when: 'gateways' in group_names
   notify: Restart procps

@@ -1,6 +1,7 @@
 ---
 
-- include: firewall.yml
+- include: shaping.yml
+
 - include: dnsmasq.yml
 - include: hostapd.yml
 #- include: wireless.yml
