@@ -3,7 +3,6 @@
 files="
 ansible.cfg_SAMPLE
 inventory_SAMPLE
-roles/gateways/vars/main.yml_SAMPLE
 "
 
 for file in ${files}; do

@@ -51,6 +51,11 @@ function block
   ${iptables} --table filter --append INPUT \
     --protocol tcp --match tcp --dport 22 --jump ACCEPT
 
+{% else %}
+  # Accept ssh.
+#  ${iptables} --table filter --append INPUT \
+#    --protocol tcp --match tcp --dport 22 --jump ACCEPT
+
 {% endif %}
   echo "DONE"
 }
@@ -59,9 +64,9 @@ function forward
 {
   local iptables="${1}"
 
-  local wan="{{ wan_interface_name }}"  # on {{ wan_real_interface_name }}
-  local lan="{{ lan_interface_name }}"
-  local wifi="{{ wifi_interface_name }}"
+  local wan="{{ wan_interface_name | default('ppp0') }}"  # on {{ wan_real_interface_name | default('eth1') }}
+  local lan="{{ lan_interface_name | default('eth0') }}"
+  local wifi="{{ wifi_interface_name | default('wlan0') }}"
 
   echo -n "Loading '${iptables}' forwarding rules..."
 
@@ -116,6 +121,8 @@ function load
   block ${iptables} ${localhost}
 {% if 'gateways' in group_names %}
   forward ${iptables}
+{% else %}
+  #forward ${iptables}
 {% endif %}
 }
 
