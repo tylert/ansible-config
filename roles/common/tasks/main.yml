@@ -8,7 +8,7 @@
   user: name=ghost password='!' state=present
 
 - name: Perform a dist-upgrade
-  apt: update_cache=yes upgrade=dist cache_valid_time=86400
+  apt: update_cache=yes upgrade=dist cache_valid_time=43200  # 12h
 
 - include: vim.yml
 
