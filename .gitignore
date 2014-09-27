@@ -1,6 +1,8 @@
+.DS_Store
 *.sw?
 ghost_id_rsa
 ghost_id_rsa.pub
 inventory
 ansible.cfg
 roles/gateways/vars/main.yml
+*.pyc

@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+# https://learn.adafruit.com/raspberry-pi-as-an-ad-blocking-access-point?view=all
+
+ad_sites_list_url='http://pgl.yoyo.org/adservers/serverlist.php?hostformat=dnsmasq&showintro=0&mimetype=plaintext'
+pixelserv_ip="{{ ad_server_ip_address | default('10.0.0.254') }}"
+
+ad_sites_file='/etc/dnsmasq.d/ad_sites.conf'
+temp_ad_sites_file='/etc/dnsmasq.d/ad_sites.conf.new'
+
+curl ${ad_sites_list_url} | sed "s/127\.0\.0\.1/${pixelserv_ip}/" > ${temp_ad_sites_file}
+
+if [ -f "${temp_ad_sites_file}" ]; then
+  # Omit some desired ad sites below
+  #sed -i -e '/www\.favoritesite\.com/d' ${temp_ad_sites_file}
+  mv ${temp_ad_sites_file} ${ad_sites_file}
+else
+  echo 'Error fetching the ad sites list, please try again.'
+  exit
+fi
+
+service dnsmasq restart

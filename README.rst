@@ -22,5 +22,3 @@ Some useful extra variables are:
 
     ansible_ssh_port=22
     ansible_ssh_user=ubuntu
-
-https://learn.adafruit.com/raspberry-pi-as-an-ad-blocking-access-point?view=all

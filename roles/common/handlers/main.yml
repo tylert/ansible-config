@@ -1,5 +1,11 @@
 ---
 
+- name: Restart firewall
+  command: /etc/firewall restart
+
+- name: Restart shaping
+  command: /etc/shaping restart
+
 - name: Restart procps
   service: name=procps state=restarted
 
@@ -9,11 +15,8 @@
 - name: Restart hostapd
   service: name=hostapd state=restarted
 
-- name: Restart firewall
-  command: /etc/firewall restart
-
-- name: Restart shaping
-  command: /etc/shaping restart
-
 - name: Update apt cache
   apt: update_cache=yes
+
+- name: Fetch ad sites
+  command: /usr/bin/sbin/fetch_ad_sites.sh

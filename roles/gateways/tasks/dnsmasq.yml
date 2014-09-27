@@ -4,6 +4,6 @@
   apt: pkg=dnsmasq state=present
 
 - name: Copy dnsmasq config
-  template: src=dnsmasq.conf.j2 dest=/etc/dnsmasq.d/site.conf
+  template: src=dnsmasq.conf.j2 dest=/etc/dnsmasq.d/local.conf
         owner=root group=root mode=0644
   notify: Restart dnsmasq
