@@ -3,8 +3,8 @@
 - name: Restart firewall
   command: /etc/firewall restart
 
-- name: Restart shaping
-  command: /etc/shaping restart
+- name: Restart traffic shaping
+  command: /etc/traffic_shaping restart
 
 - name: Restart procps
   service: name=procps state=restarted
@@ -19,4 +19,4 @@
   apt: update_cache=yes
 
 - name: Fetch ad sites
-  command: /usr/bin/sbin/fetch_ad_sites.sh
+  command: /usr/local/sbin/fetch_ad_sites.sh

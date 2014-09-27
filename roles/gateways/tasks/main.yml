@@ -1,10 +1,11 @@
 ---
 
-- include: shaping.yml
-
 - include: dnsmasq.yml
 - include: hostapd.yml
 - include: wireless.yml
+
+- include: traffic_shaping.yml
+- include: ad_filtering.yml
 
 - name: Install gateway packages
   apt: pkg={{ item }} state=present

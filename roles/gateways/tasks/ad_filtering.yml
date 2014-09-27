@@ -7,10 +7,11 @@
     - gunicorn
 
 - name: Install ad sites fetcher
-  template: src=fetch_ad_sites.j2 dst=/usr/local/sbin/fetch_ad_sites.sh
+  template: src=fetch_ad_sites.j2 dest=/usr/local/sbin/fetch_ad_sites.sh
             owner=root group=root mode=0755
   notify: Fetch ad sites
 
 - name: Add cron to re-fetch ad sites
-  cron: name='fetch ad sites' user=root weekday='0'  # Sunday
+  cron: name='fetch ad sites' user=root weekday='0'
         job='/usr/local/sbin/fetch_ad_sites.sh' state=present
+  # 0 is Sunday
