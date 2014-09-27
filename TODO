@@ -8,6 +8,10 @@ Calculate the r2q value for traffic control script???
 
 ---
 
+Convert firewall and traffic_shaper to proper init scripts
+
+---
+
 Fix wireless.yml to update cache BEFORE trying to install wireless packages
 from the non-free repo.
 
