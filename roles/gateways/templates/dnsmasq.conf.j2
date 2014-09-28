@@ -4,9 +4,10 @@ local=/{{ domain_name | default('lan') }}/
 no-dhcp-interface={{ wan_interface_name | default('ppp0') }}
 expand-hosts
 domain={{ domain_name | default('lan') }}
-dhcp-range={{ lan_dhcp_range_start | default('10.0.0.1') }}, {{ lan_dhcp_range_end | default('10.0.0.50') }}, {{ lan_dhcp_lease_time | default('12h') }}
-dhcp-range={{ wifi_dhcp_range_start | default('10.1.0.1') }}, {{ wifi_dhcp_range_end | default('10.1.0.50') }}, {{ wifi_dhcp_lease_time | default('12h') }}
-#dhcp-range=::1:1, ::FFFF:FFFF, constructor:eth0, ra-names, 12h
+dhcp-range={{ lan_dhcp_range_start | default('10.0.0.1') }}, {{ lan_dhcp_range_end | default('10.0.0.32') }}, {{ lan_dhcp_lease_time | default('12h') }}
+dhcp-range={{ wifi_dhcp_range_start | default('10.1.0.1') }}, {{ wifi_dhcp_range_end | default('10.1.0.32') }}, {{ wifi_dhcp_lease_time | default('12h') }}
+dhcp-range=::1, ::FF, constructor:{{ lan_interface_name | default('eth0') }}, ra-names, 12h
+dhcp-range=::1, ::FF, constructor:{{ wifi_interface_name | default('wlan0') }}, ra-names, 12h
 enable-ra
 dhcp-authoritative
 no-negcache
