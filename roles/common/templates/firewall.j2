@@ -34,9 +34,15 @@ function block
     --limit 25/s --limit-burst 50 --jump ACCEPT
 
   # Accept a few pings.
-  ${iptables} --table filter --append INPUT \
-    --protocol icmp --match limit \
-    --limit 4/s --limit-burst 8 --jump ACCEPT
+  if [ "ip6tables" == ${iptables} ]; then
+    ${iptables} --table filter --append INPUT \
+      --protocol icmpv6 --match limit \
+      --limit 4/s --limit-burst 8 --jump ACCEPT
+  else
+    ${iptables} --table filter --append INPUT \
+      --protocol icmp --match limit \
+      --limit 4/s --limit-burst 8 --jump ACCEPT
+  fi
 
   # Accept existing connections.
   ${iptables} --table filter --append INPUT \
