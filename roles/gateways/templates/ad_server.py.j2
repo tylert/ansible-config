@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 # http://garethrees.org/2007/11/14/pngcrush/
@@ -9,21 +8,13 @@ import struct
 import zlib
 from binascii import unhexlify
 
-import multiprocessing
-#import gunicorn.app.base
-
-
-bind = "{{ ad_server_ip_address | default('10.0.0.254') }}:80"
-workers = multiprocessing.cpu_count() * 2 + 1
-proc_name = ad_server
-
 
 def chunk(type, data):
     return (struct.pack('>I', len(data)) + type + data
             + struct.pack('>i', zlib.crc32(type + data)))
 
 
-def app(environ, start_response):
+def application(environ, start_response):
     png = (b'\x89PNG\r\n\x1A\n'
           + chunk(b'IHDR', struct.pack('>IIBBBBB', 1, 1, 8, 6, 0, 0, 0))
           + chunk(b'IDAT', unhexlify(b'789c6300010000050001'))

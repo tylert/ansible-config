@@ -1,0 +1,11 @@
+CONFIG = {
+    'working_dir': '/usr/local/sbin',
+#    'user': 'www-data',
+#    'group': 'www-data',
+    'args': (
+        '--bind=10.4.0.201:80',
+        '--workers=4',
+        '--log-level=debug',
+        'ad_server',
+    ),
+}

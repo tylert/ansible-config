@@ -15,6 +15,12 @@
 - name: Install gunicorn
   apt: pkg=gunicorn state=present
 
+- name: Install ad server config
+  template: src=ad_server.conf.j2 dest=/etc/gunicorn.d/ad_server.conf
+            owner=root group=root mode=0644
+  notify: Start ad server
+
 - name: Install ad server
   template: src=ad_server.py.j2 dest=/usr/local/sbin/ad_server.py
-            owner=root group=root mode=0755
+            owner=root group=root mode=0644
+  notify: Restart ad server
