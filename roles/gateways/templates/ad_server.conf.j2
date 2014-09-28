@@ -1,9 +1,7 @@
 CONFIG = {
     'working_dir': '/usr/local/sbin',
-#    'user': 'www-data',
-#    'group': 'www-data',
     'args': (
-        '--bind=10.4.0.201:80',
+        '--bind={{ ad_server_ip_address | default('10.0.0.254') }}:80',
         '--workers=4',
         '--log-level=debug',
         'ad_server',

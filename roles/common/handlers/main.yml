@@ -21,8 +21,5 @@
 - name: Fetch ad sites
   command: /usr/local/sbin/fetch_ad_sites.sh
 
-- name: Start ad server
-  service: name=gunicorn state=started
-
-- name: Restart ad server
+- name: Restart gunicorn
   service: name=gunicorn state=restarted
