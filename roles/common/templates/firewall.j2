@@ -29,9 +29,15 @@ function block
   ${iptables} --table filter --policy INPUT DROP
 
   # Attempt to protect against SYN flooding.
+{% if 'gateways' not in group_names %}
   ${iptables} --table filter --append INPUT \
     --protocol tcp --syn --match limit \
     --limit 25/s --limit-burst 50 --jump ACCEPT
+{% else %}
+#  ${iptables} --table filter --append INPUT \
+#    --protocol tcp --syn --match limit \
+#    --limit 25/s --limit-burst 50 --jump ACCEPT
+{% endif %}
 
   # Accept a few pings.
   if [ "ip6tables" == ${iptables} ]; then
@@ -52,17 +58,15 @@ function block
   ${iptables} --table filter --append INPUT \
     --source ${localhost} --jump ACCEPT
 
-{% if 'gateways' not in group_names %}
   # Accept ssh.
+{% if 'gateways' not in group_names %}
   ${iptables} --table filter --append INPUT \
     --protocol tcp --match tcp --dport 22 --jump ACCEPT
-
 {% else %}
-  # Accept ssh.
 #  ${iptables} --table filter --append INPUT \
 #    --protocol tcp --match tcp --dport 22 --jump ACCEPT
-
 {% endif %}
+
   echo "DONE"
 }
 
@@ -86,25 +90,25 @@ function forward
       --out-interface ${wan} --jump MASQUERADE
   fi
 
-  # WIFI -> LAN.
+  # Forward traffic on WIFI to LAN.
   ${iptables} --table filter --append FORWARD \
     --in-interface ${wifi} --out-interface ${lan} --jump ACCEPT
-  # LAN -> WIFI.
+  # Forward traffic on LAN to WIFI.
   ${iptables} --table filter --append FORWARD \
     --in-interface ${lan} --out-interface ${wifi} --jump ACCEPT
 
-  # LAN -> WAN.
+  # Forward traffic on LAN to WAN.
   ${iptables} --table filter --append FORWARD \
     --in-interface ${lan} --out-interface ${wan} --jump ACCEPT
-  # WIFI -> WAN.
+  # Forward traffic on WIFI to WAN.
   ${iptables} --table filter --append FORWARD \
     --in-interface ${wifi} --out-interface ${wan} --jump ACCEPT
 
-  # WAN -> LAN.
+  # Forward traffic on WAN to LAN.
   ${iptables} --table filter --append FORWARD \
     --in-interface ${wan} --out-interface ${lan} --match state \
     --state ESTABLISHED,RELATED --jump ACCEPT
-  # WAN -> WIFI.
+  # Forward traffic on WAN to WIFI.
   ${iptables} --table filter --append FORWARD \
     --in-interface ${wan} --out-interface ${wifi} --match state \
     --state ESTABLISHED,RELATED --jump ACCEPT
