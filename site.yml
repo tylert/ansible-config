@@ -2,3 +2,4 @@
 
 - include: workstation.yml
 - include: gateway.yml
+- include: storage.yml

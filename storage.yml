@@ -1,0 +1,8 @@
+---
+
+- hosts: storage
+  roles:
+    - common
+#    - storage
+  vars:
+    gateway: false
