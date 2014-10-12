@@ -1,8 +1,8 @@
 ---
 
-- hosts: workstations
+- hosts: workstation
   roles:
     - common
-    - workstations
+    - workstation
   vars:
     gateway: false

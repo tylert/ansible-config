@@ -29,7 +29,7 @@ function block
   ${iptables} --table filter --policy INPUT DROP
 
   # Attempt to protect against SYN flooding.
-{% if 'gateways' not in group_names %}
+{% if 'gateway' not in group_names %}
   ${iptables} --table filter --append INPUT \
     --protocol tcp --syn --match limit \
     --limit 25/s --limit-burst 50 --jump ACCEPT
@@ -59,7 +59,7 @@ function block
     --source ${localhost} --jump ACCEPT
 
   # Accept ssh.
-{% if 'gateways' not in group_names %}
+{% if 'gateway' not in group_names %}
   ${iptables} --table filter --append INPUT \
     --protocol tcp --match tcp --dport 22 --jump ACCEPT
 {% else %}
@@ -129,7 +129,7 @@ function load
   local localhost="${2}"
 
   block ${iptables} ${localhost}
-{% if 'gateways' in group_names %}
+{% if 'gateway' in group_names %}
   forward ${iptables}
 {% else %}
   #forward ${iptables}

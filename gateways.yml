@@ -1,8 +1,8 @@
 ---
 
-- hosts: gateways
+- hosts: gateway
   roles:
     - common
-    - gateways
+    - gateway
   vars:
     gateway: true

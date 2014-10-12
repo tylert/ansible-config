@@ -1,7 +1,7 @@
-[workstations]
+[workstation]
 radish
 parsnip
 turnip
 
-[gateways]
+[gateway]
 milena
