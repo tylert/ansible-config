@@ -1,7 +1,9 @@
 [workstation]
-radish
-parsnip
-turnip
+desktop1
+desktop2
+
+[storage]
+server1
 
 [gateway]
-milena
+router1
