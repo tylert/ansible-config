@@ -17,9 +17,9 @@
 - name: Install some essential administration packages needed on all machines
   apt: pkg={{ item }} state=present
   with_items:
-    - screen
+    - byobu
+    - rsync
     - git
-#    - ansible
     - ethtool
 
 # In older Debian, 'git' was called 'git-core'
