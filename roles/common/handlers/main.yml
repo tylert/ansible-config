@@ -3,9 +3,6 @@
 - name: Restart firewall
   command: /etc/firewall restart
 
-- name: Restart traffic shaping
-  command: /etc/traffic_shaping restart
-
 - name: Restart procps
   service: name=procps state=restarted
 

@@ -3,8 +3,13 @@
 - name: Install traffic shaping
   template: src=traffic_shaping.j2 dest=/etc/traffic_shaping
             owner=root group=root mode=0755
-  notify: Restart traffic shaping
 
-- name: Enable traffic shaping
-  lineinfile: dest=/etc/rc.local insertbefore='exit 0'
-              line='/etc/traffic_shaping start' state=present
+- name: Install traffic shaping start
+  template: src=traffic_shaping_start.j2
+            dest=/etc/ppp/ip-up.d/1traffic_shaping
+            owner=root group=root mode=0755
+
+- name: Install traffic shaping stop
+  template: src=traffic_shaping_stop.j2
+            dest=/etc/ppp/ip-down.d/1traffic_shaping
+            owner=root group=root mode=0755
