@@ -12,8 +12,6 @@
 - name: Perform a dist-upgrade
   apt: update_cache=yes upgrade=dist cache_valid_time=43200  # 12h
 
-- include: vim.yml
-
 - name: Install some essential administration packages needed on all machines
   apt: pkg={{ item }} state=present
   with_items:
@@ -21,6 +19,8 @@
     - rsync
     - git
     - ethtool
+
+- include: vim.yml
 
 # In older Debian, 'git' was called 'git-core'
 # when: ansible_distribution == 'Debian' and

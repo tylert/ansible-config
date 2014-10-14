@@ -19,9 +19,9 @@ function load
   local downbw="{{ wan_downbw_kbps | default('6000') }}"  # download ceiling in kbps
   local upbw="{{ wan_upbw_kbps | default('800') }}"  # upload ceiling in kbps
 
-  local voipbw=$((${upbw} * 1/100))                  #  1% of upbw in kbps
-  local highbw=$((${upbw} * 25/100))                 # 25% of upbw in kbps
-  local normbw=$((${upbw} - ${voipbw} - ${highbw}))  # 74% of upbw in kbps
+  local voipbw="{{ voip_upbw_kbps | default('128') }}"  # voip ceiling in kbps
+  local highbw="{{ high_upbw_kbps | default('272') }}"  # high ceiling in kbps
+  local normbw=$((${upbw} - ${voipbw} - ${highbw}))     # norm ceiling in kbps
 
   echo -n "Loading ingress QoS rules..."
 
