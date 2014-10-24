@@ -1,0 +1,77 @@
+#!/usr/bin/env bash
+
+function rsync_dirs
+{
+  for (( index=0 ; index<${#src_dirs[@]} ; index++ )) ; do
+    echo "Updating '${dst_dirs[${index}]}' from '${src_dirs[${index}]}'..." |\
+      tee -a ${logfile}
+    rsync -e "${ssh_cmd}" ${rsync_opts} \
+      "${src_dirs[${index}]}/" "${dst_dirs[${index}]}/" | tee -a ${logfile}
+  done
+}
+
+logfile="${HOME}/backup.log"
+
+if [ -e ${logfile} ] ; then
+  if [ $(stat -c %s ${logfile}) -gt 1000000 ] ; then
+    rm ${logfile}
+  fi
+fi
+
+{% if 'storage' in group_names %}
+rsync_opts="-avz --progress --delete --bwlimit=200000 --exclude=lost+found"
+ssh_cmd="ssh -l root"
+
+src_dirs=(
+  "file:/home"
+)
+dst_dirs=(
+  "/home"
+)
+
+rsync_dirs
+
+ssh_cmd="ssh -l couch -i couch_id_rsa"
+
+src_dirs=(
+  "file:/data/photo"
+  "file:/data/book"
+  "file:/data/audio"
+  "file:/data/.other"
+  "file:/data/movie"
+  "file:/data/television"
+  "file:/data/rachq"
+  "file:/data/software"
+)
+dst_dirs=(
+  "/data/photo"
+  "/data/book"
+  "/data/audio"
+  "/data/.other"
+  "/data/movie"
+  "/data/television"
+  "/data/rachq"
+  "/data/software"
+)
+
+rsync_dirs
+{% else %}
+rsync_opts="-avz --progress --delete --bwlimit=50000 --exclude=lost+found"
+ssh_cmd="ssh -l ${USER} -i ${HOME}/.ssh/id_rsa"
+
+src_dirs=(
+  "${HOME}/bin"
+  "${HOME}/data"
+  "${HOME}/Desktop"
+)
+dst_dirs=(
+  "file:${HOME}/bin"
+  "file:${HOME}/data"
+  "file:${HOME}/Desktop"
+)
+
+rsync_dirs
+{% endif %}
+
+echo -n "BACKUP COMPLETE " | tee -a ${logfile}
+date | tee -a ${logfile}
