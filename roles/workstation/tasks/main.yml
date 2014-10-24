@@ -19,6 +19,7 @@
   apt: pkg={{ item }} state=present
   with_items:
     - gitk
+    - vim-gtk
     - build-essential
     - keepassx
     - librecad
