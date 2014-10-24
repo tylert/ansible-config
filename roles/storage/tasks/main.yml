@@ -1,4 +1,7 @@
 ---
 
 - name: Install smartmontools
-  apt: pkg=smartmontools state=present
+  apt: pkg={{ item }} state=present
+  with_items:
+    - smartmontools
+    - libatasmart
