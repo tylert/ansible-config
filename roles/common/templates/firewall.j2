@@ -62,6 +62,8 @@ function block
 {% if 'gateway' not in group_names %}
   ${iptables} --table filter --append INPUT \
     --protocol tcp --match tcp --dport 22 --jump ACCEPT
+  ${iptables} --table filter --append INPUT \
+    --protocol udp --jump ACCEPT
 {% else %}
 #  ${iptables} --table filter --append INPUT \
 #    --protocol tcp --match tcp --dport 22 --jump ACCEPT
