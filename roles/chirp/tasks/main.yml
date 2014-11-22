@@ -8,3 +8,7 @@
 - name: Install chirp-daily
   apt: pkg=chirp-daily state=present
   when: ansible_distribution == 'Ubuntu'
+
+- name: Remove chirp
+  apt: pkg=chirp state=absent purge=yes
+  when: ansible_distribution == 'Ubuntu'
