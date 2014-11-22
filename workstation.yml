@@ -7,6 +7,7 @@
     - web_browser
     - email_client
     - office_suite
+    - android_repair
     - chirp
   vars:
     gateway: false

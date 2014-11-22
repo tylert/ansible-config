@@ -6,8 +6,8 @@
   when: ansible_distribution == 'Ubuntu'
 
 - name: Add chirp-daily repository
-  apt_repository: repo='ppa:dansmith/chirp-snapshots'
-                  update_cache=yes state=present
+  apt_repository: repo='ppa:dansmith/chirp-snapshots' update_cache=yes
+                  state=present
   when: ansible_distribution == 'Ubuntu'
 
 - name: Install chirp-daily

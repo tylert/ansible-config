@@ -5,9 +5,6 @@
 - include: sshfs.yml
 - include: hdhomerun.yml
 
-#- include: adb.yml
-#- include: heimdall.yml
-
 #- include: gqrx.yml
 
 - name: Install useful clicky packages

@@ -1,7 +1,0 @@
----
-
-- name: Install phone management packages
-  apt: pkg={{ item }} state=present
-  with_items:
-    - heimdall-flash
-    - heimdall-flash-frontend
