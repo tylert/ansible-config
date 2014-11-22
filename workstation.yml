@@ -4,5 +4,6 @@
   roles:
     - common
     - workstation
+    - chirp
   vars:
     gateway: false

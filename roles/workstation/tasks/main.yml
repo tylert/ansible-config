@@ -12,7 +12,6 @@
 #- include: adb.yml
 #- include: heimdall.yml
 
-- include: chirp-daily.yml
 #- include: gqrx.yml
 
 - name: Install useful clicky packages
