@@ -4,6 +4,9 @@
   roles:
     - common
     - workstation
+    - web_browser
+    - email_client
+    - office_suite
     - chirp
   vars:
     gateway: false

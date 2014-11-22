@@ -6,7 +6,7 @@
     - libreoffice
     - libreoffice-pdfimport
 
-- name: Cull abiword and gnumeric
+- name: Remove abiword and gnumeric
   apt: pkg={{ item }} state=absent purge=yes
   with_items:
     - abiword

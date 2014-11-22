@@ -2,10 +2,6 @@
 
 - include: hibernate.yml
 
-- include: firefox.yml
-- include: thunderbird.yml
-- include: libreoffice.yml
-
 - include: sshfs.yml
 - include: hdhomerun.yml
 
