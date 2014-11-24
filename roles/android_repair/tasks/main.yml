@@ -1,11 +1,11 @@
 ---
 
-# for repairing Android phones and tablets
+# For repairing Android phones and tablets
 - name: Install adb
   apt: pkg=android-tools-adb state=present
   when: ansible_distribution == 'Ubuntu'
 
-# for repairing Samsung phones and tablets
+# For repairing Samsung phones and tablets
 - name: Install heimdall
   apt: pkg={{ item }} state=present
   with_items:

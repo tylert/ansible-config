@@ -4,5 +4,6 @@
   roles:
     - common
     - gateway
+    - text_editor
   vars:
     gateway: true

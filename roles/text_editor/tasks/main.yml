@@ -6,5 +6,5 @@
     - vim
     - vim-scripts
 
-- name: Cull nano
+- name: Remove nano
   apt: pkg=nano state=absent purge=yes

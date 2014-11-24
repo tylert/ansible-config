@@ -4,6 +4,7 @@
   roles:
     - common
     - workstation
+    - text_editor
     - web_browser
     - email_client
     - office_suite

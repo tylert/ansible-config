@@ -3,6 +3,7 @@
 - hosts: storage
   roles:
     - common
+    - text_editor
     - smartmontools
 #    - { role: common, backup_user: root }
   vars:
