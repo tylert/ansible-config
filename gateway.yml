@@ -4,6 +4,7 @@
   roles:
     - common
     - gateway
+    - wireless
     - text_editor
   vars:
     gateway: true

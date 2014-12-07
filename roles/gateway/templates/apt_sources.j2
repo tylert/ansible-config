@@ -1,9 +1,0 @@
-deb http://ftp.ca.debian.org/debian/ {{ debian_version | default('wheezy') }} main contrib non-free
-deb-src http://ftp.ca.debian.org/debian/ {{ debian_version | default('wheezy') }} main contrib non-free
-
-deb http://security.debian.org/ {{ debian_version | default('wheezy') }}/updates main contrib non-free
-deb-src http://security.debian.org/ {{ debian_version | default('wheezy') }}/updates main contrib non-free
-
-# {{ debian_version | default('wheezy') }}-updates, previously known as 'volatile'
-deb http://ftp.ca.debian.org/debian/ {{ debian_version | default('wheezy') }}-updates main contrib non-free
-deb-src http://ftp.ca.debian.org/debian/ {{ debian_version | default('wheezy') }}-updates main contrib non-free
