@@ -12,11 +12,6 @@ Convert firewall to a proper init script
 
 ---
 
-Fix wireless.yml to update cache BEFORE trying to install wireless packages
-from the non-free repo.
-
----
-
 curl
 abook
 arduino
