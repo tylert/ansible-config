@@ -7,4 +7,5 @@
     - wireless
     - text_editor
   vars:
+    graphical: false
     gateway: true

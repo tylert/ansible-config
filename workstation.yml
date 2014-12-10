@@ -11,4 +11,5 @@
     - android_repair
     - chirp
   vars:
+    graphical: true
     gateway: false

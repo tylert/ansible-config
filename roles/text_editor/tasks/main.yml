@@ -6,5 +6,9 @@
     - vim
     - vim-scripts
 
+- name: Install gvim
+  apt: pkg=vim-gtk state=present
+  when: graphical
+
 - name: Remove nano
   apt: pkg=nano state=absent purge=yes
