@@ -3,6 +3,7 @@
 - hosts: workstation
   roles:
     - common
+    - desktop_settings
     - workstation
     - text_editor
     - web_browser
