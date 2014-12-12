@@ -3,9 +3,6 @@
 - name: Restart firewall
   command: /etc/firewall restart
 
-- name: Restart procps
-  service: name=procps state=restarted
-
 - name: Restart dnsmasq
   service: name=dnsmasq state=restarted
 

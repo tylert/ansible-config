@@ -5,9 +5,11 @@
   with_items:
     - libreoffice
     - libreoffice-pdfimport
+  when: graphical
 
 - name: Remove abiword and gnumeric
   apt: pkg={{ item }} state=absent purge=yes
   with_items:
     - abiword
     - gnumeric
+  when: graphical

@@ -5,11 +5,11 @@
   with_items:
     - thunderbird
     - enigmail
-  when: ansible_distribution == 'Ubuntu'
+  when: graphical and ansible_distribution == 'Ubuntu'
 
 - name: Install icedove
   apt: pkg={{ item }} state=present
   with_items:
     - icedove
     - enigmail
-  when: ansible_distribution == 'Debian'
+  when: graphical and ansible_distribution == 'Debian'

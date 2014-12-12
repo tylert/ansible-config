@@ -13,3 +13,4 @@
     - { key: 'MUSIC', old_value: 'Music', new_value: '' }
     - { key: 'PICTURES', old_value: 'Pictures', new_value: '' }
     - { key: 'VIDEOS', old_value: 'Videos', new_value: '' }
+  when: graphical
