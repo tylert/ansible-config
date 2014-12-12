@@ -10,6 +10,7 @@
     - office_suite
     - android_repair
     - chirp
+    - sshfs
   vars:
     graphical: true
     gateway: false

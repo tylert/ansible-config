@@ -1,14 +1,16 @@
 ---
 
-# For repairing Android phones and tablets
+# adb is for repairing Android phones and tablets
+# heimdall is for repairing Samsung Android phones and tablets
+
 - name: Install adb
   apt: pkg=android-tools-adb state=present
   when: ansible_distribution == 'Ubuntu'
 
-# For repairing Samsung phones and tablets
 - name: Install heimdall
-  apt: pkg={{ item }} state=present
-  with_items:
-    - heimdall-flash
-    - heimdall-flash-frontend
+  apt: pkg=heimdall-flash state=present
   when: ansible_distribution == 'Ubuntu'
+
+- name: Install heimdall frontend
+  apt: pkg=heimdall-flash-frontend state=present
+  when: graphical and ansible_distribution == 'Ubuntu'
