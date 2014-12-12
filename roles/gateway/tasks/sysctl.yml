@@ -1,6 +1,14 @@
 ---
 
-- name: Install sysctl config
-  template: src=sysctl.j2 dest=/etc/sysctl.d/local.conf
-            owner=root group=root mode=0644
-  notify: Restart procps
+- name: Configure sysctl settings
+  sysctl: sysctl_file=/etc/sysctl.d/local.conf reload=yes
+          name={{ item.key }} value={{ item.value }} state=present
+  with_items:
+    - { key: 'net.ipv4.ip_forward', value: '1' }
+    - { key: 'net.ipv4.tcp_syncookies', value: '1' }
+    - { key: 'net.ipv4.conf.all.rp_filter', value: '1' }
+    - { key: 'net.ipv4.conf.default.rp_filter', value: '1' }
+    - { key: 'net.ipv6.conf.all.forwarding', value: '1' }
+    - { key: 'net.ipv6.conf.default.forwarding', value: '1' }
+    - { key: 'net.ipv6.conf.all.use_tempaddr', value: '2' }
+    - { key: 'net.ipv6.conf.default.use_tempaddr', value: '2' }
