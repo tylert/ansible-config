@@ -3,7 +3,7 @@
 # Chirp issue #1811
 - name: Remove chirp
   apt: pkg=chirp state=absent purge=yes
-  when: graphical and ansible_distribution == 'Ubuntu'
+  when: ansible_distribution == 'Ubuntu'
 
 - name: Add chirp-daily repository
   apt_repository: repo='ppa:dansmith/chirp-snapshots' update_cache=yes

@@ -12,4 +12,3 @@
   with_items:
     - abiword
     - gnumeric
-  when: graphical
