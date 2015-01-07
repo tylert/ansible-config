@@ -9,6 +9,11 @@ Standard usage::
 
   ansible-playbook site.yml --sudo
 
+More-specialized usage::
+
+  # packer.io
+  sudo ansible-playbook site.yml --connection=local
+
   ansible-playbook site.yml \
     --limit=pinky,brain \
     --sudo --ask-sudo-pass \
