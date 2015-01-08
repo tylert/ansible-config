@@ -7,14 +7,14 @@ Usage
 
 Standard usage::
 
-  ansible-playbook site.yml --sudo
+  ansible-playbook site.yaml --sudo
 
 More-specialized usage::
 
   # packer.io
-  sudo ansible-playbook site.yml --connection=local
+  sudo ansible-playbook site.yaml --connection=local
 
-  ansible-playbook site.yml \
+  ansible-playbook site.yaml \
     --limit=pinky,brain \
     --sudo --ask-sudo-pass \
     --skip-tags=upgrade

@@ -1,10 +1,10 @@
 ---
 
-- include: hibernate.yml
+- include: hibernate.yaml
 
-- include: hdhomerun.yml
+- include: hdhomerun.yaml
 
-#- include: gqrx.yml
+#- include: gqrx.yaml
 
 - name: Install useful clicky packages
   apt: pkg={{ item }} state=present

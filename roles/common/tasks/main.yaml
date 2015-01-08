@@ -7,7 +7,7 @@
 - name: Disable password login for the ghost user
   user: name=ghost password='!' state=present
 
-- include: firewall.yml
+- include: firewall.yaml
 
 - name: Perform a dist-upgrade
   apt: update_cache=yes upgrade=dist cache_valid_time=43200  # 12h
@@ -20,7 +20,7 @@
     - git
     - ethtool
 
-#- include: backup_stuff.yml
+#- include: backup_stuff.yaml
 
 # In older Debian, 'git' was called 'git-core'
 # when: ansible_distribution == 'Debian' and
