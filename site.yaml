@@ -1,5 +1,0 @@
----
-
-- include: workstation.yaml
-- include: storage.yaml
-- include: gateway.yaml

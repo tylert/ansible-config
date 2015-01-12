@@ -1,0 +1,5 @@
+---
+
+- include: workstation.yml
+- include: storage.yml
+- include: gateway.yml
