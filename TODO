@@ -1,3 +1,6 @@
+mercurial
+hg-fast-export
+
 Calculate the r2q value for traffic control script???
   MTU=1470
   MIN_RATE=10
