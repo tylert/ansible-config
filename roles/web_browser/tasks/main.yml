@@ -1,9 +1,9 @@
 ---
 
-- name: Install firefox
-  apt: pkg=firefox state=present
-  when: graphical and ansible_distribution == 'Ubuntu'
-
 - name: Install iceweasel
   apt: pkg=iceweasel state=present
   when: graphical and ansible_distribution == 'Debian'
+
+- name: Install firefox
+  apt: pkg=firefox state=present
+  when: graphical and ansible_distribution == 'Ubuntu'

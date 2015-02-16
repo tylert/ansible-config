@@ -1,6 +1,8 @@
 ---
 
-# Chirp issue #1811
+# CHIRP is for programming amateur radio transceivers
+
+# CHIRP issue #1811
 - name: Remove chirp
   apt: pkg=chirp state=absent purge=yes
   when: ansible_distribution == 'Ubuntu'
