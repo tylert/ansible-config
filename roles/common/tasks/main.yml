@@ -15,6 +15,8 @@
 - name: Install some essential administration packages needed on all machines
   apt: pkg={{ item }} state=present
   with_items:
+    - openssh-server
+    - sudo
     - byobu
     - rsync
     - git
