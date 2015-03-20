@@ -2,6 +2,7 @@
 
 - hosts: workstation
   roles:
+    - dist_upgrade
     - common
     - desktop_settings
     - workstation
