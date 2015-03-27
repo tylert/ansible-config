@@ -3,17 +3,5 @@
 - name: Restart firewall
   command: /etc/firewall restart
 
-- name: Restart dnsmasq
-  service: name=dnsmasq state=restarted
-
-- name: Restart hostapd
-  service: name=hostapd state=restarted
-
 - name: Update apt cache
   apt: update_cache=yes
-
-- name: Fetch ad sites
-  command: /usr/local/sbin/fetch_ad_sites.sh
-
-- name: Restart gunicorn
-  service: name=gunicorn state=restarted

@@ -1,0 +1,13 @@
+---
+
+- name: Restart dnsmasq
+  service: name=dnsmasq state=restarted
+
+- name: Restart hostapd
+  service: name=hostapd state=restarted
+
+- name: Restart gunicorn
+  service: name=gunicorn state=restarted
+
+- name: Fetch ad sites
+  command: /usr/local/sbin/fetch_ad_sites.sh
