@@ -1,10 +1,7 @@
 ---
 
 - name: Install sshfs
-  apt: pkg={{ item }} state=present
-  with_items:
-    - sshfs
-    - dcfldd
+  apt: pkg=sshfs state=present
 
 - name: Correct fuse options
   lineinfile: dest=/etc/fuse.conf line='user_allow_other' state=present
