@@ -1,7 +1,5 @@
 ---
 
-- include: hibernate.yml
-
 - include: hdhomerun.yml
 
 #- include: gqrx.yml

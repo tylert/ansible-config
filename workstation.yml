@@ -6,6 +6,7 @@
     - common
     - desktop_settings
     - workstation
+    - hibernate_enable
     - text_editor
     - web_browser
     - email_client
