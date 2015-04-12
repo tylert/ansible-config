@@ -1,7 +1,5 @@
 ---
 
-- include: hdhomerun.yml
-
 #- include: gqrx.yml
 
 - name: Install useful clicky packages
