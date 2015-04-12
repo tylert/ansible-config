@@ -2,6 +2,3 @@
 
 - name: Restart firewall
   command: /etc/firewall restart
-
-- name: Update apt cache
-  apt: update_cache=yes

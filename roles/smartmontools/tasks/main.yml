@@ -3,7 +3,7 @@
 - name: Install smartmontools
   apt: pkg={{ item }} state=present
   with_items:
-    - cryptsetup
     - smartmontools
     - hdparm
     - parted
+    - cryptsetup
