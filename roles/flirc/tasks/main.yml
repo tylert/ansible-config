@@ -1,0 +1,14 @@
+---
+
+- name: Install python-software-properties
+#  apt: pkg=python-software-properties state=present  # add-apt-repository
+  apt: pkg=software-properties-common state=present  # add-apt-repository
+
+- name: Add flirc repository
+  command: add-apt-repository --yes
+    'deb http://apt.flirc.tv/arch/x64 binary/'
+  changed_when: false  # no return code
+  notify: Update apt cache
+
+- name: Install flirc
+  apt: pkg=flirc state=present
