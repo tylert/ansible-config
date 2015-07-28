@@ -16,11 +16,6 @@
     - sudo
     - byobu
     - rsync
-    - git
     - ethtool
 
 #- include: backup_stuff.yml
-
-# In older Debian, 'git' was called 'git-core'
-# when: ansible_distribution == 'Debian' and
-#       ansible_distribution_version <= '7.0'
