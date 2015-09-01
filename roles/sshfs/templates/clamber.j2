@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+# sshfs should be installed and the user should be a member of group 'fuse'.
+
+far="${1}"
+near="${2}"
+
+if [ -z ${far} ] || [ -z ${near} ]; then
+  echo "Usage:  $(basename {0}) remote_host:remote_directory local_directory"
+  exit 1
+fi
+
+if [ ! -d ${near} ]; then
+  echo "Missing local_directory"
+  exit 2
+fi
+
+fusermount -u ${near}
+sshfs ${far} ${near} -o allow_other
