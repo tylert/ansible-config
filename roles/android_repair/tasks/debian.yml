@@ -1,0 +1,14 @@
+---
+
+# adb is for repairing Android phones and tablets
+# heimdall is for repairing Samsung Android phones and tablets
+
+- name: Install adb
+  apt: pkg=android-tools-adb state=present
+
+- name: Install heimdall
+  apt: pkg=heimdall-flash state=present
+
+- name: Install heimdall frontend
+  apt: pkg=heimdall-flash-frontend state=present
+  when: graphical
