@@ -1,4 +1,5 @@
 ---
 
-- include: [ {{ ansible_distribution_release | lower }}.yml,
-      {{ ansible_distribution | lower }}.yml ]
+#- include: [ "{{ ansible_distribution_release | lower }}.yml",
+#      "{{ ansible_distribution | lower }}.yml" ]
+#- include: {{ ansible_distribution | lower}}.yml
