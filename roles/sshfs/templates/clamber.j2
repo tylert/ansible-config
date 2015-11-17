@@ -5,15 +5,14 @@
 far="${1}"
 near="${2}"
 
-if [ -z ${far} ] || [ -z ${near} ]; then
+if [ -z "${far}" ] || [ -z "${near}" ]; then
   echo "Usage:  $(basename {0}) remote_host:remote_directory local_directory"
   exit 1
 fi
 
-if [ ! -d ${near} ]; then
-  echo "Missing local_directory"
-  exit 2
+if [ ! -d "${near}" ]; then
+  mkdir -p "${near}"
 fi
 
-fusermount -u ${near}
-sshfs ${far} ${near} -o allow_other
+fusermount -u "${near}"
+sshfs "${far}" "${near}" -o allow_other
