@@ -5,6 +5,8 @@
   with_items:
     - icedove
     - enigmail
+    - iceowl-extension
+    - xul-ext-sogo-connector
   when: graphical and ansible_distribution == 'Debian'
 
 - name: Install thunderbird
@@ -12,4 +14,6 @@
   with_items:
     - thunderbird
     - enigmail
+    - xul-ext-lightning
+  # there doesn't seem to be a proper sogo connector package
   when: graphical and ansible_distribution == 'Ubuntu'
