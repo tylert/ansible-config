@@ -1,7 +1,5 @@
 http://blog.halberom.co.uk/ansible_multi_distro_role.html
-
-mercurial
-hg-fast-export
+https://github.com/mitchellh/packer/issues/1555
 
 Calculate the r2q value for traffic control script???
   MTU=1470
@@ -13,26 +11,25 @@ Calculate the r2q value for traffic control script???
 
 ---
 
-Convert firewall to a proper init script
+Convert firewall to proper UFW things
 
 ---
 
-curl
-abook
 arduino
-asymptote
 avrdude
 cclive
+curl
 fldigi
 ghostscript
 gparted
+hg-fast-export
 make
 mcomix
 meld
+mercurial
 pdftk
 psutils
 pwgen
-quvi
 sed
 strace
 ufraw-batch

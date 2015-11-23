@@ -5,4 +5,4 @@
 
 - name: Install hdhomerun-config-gui
   apt: pkg=hdhomerun-config-gui state=present
-  when: ansible_distribution == 'Ubuntu'
+  when: graphical and ansible_distribution == 'Ubuntu'
