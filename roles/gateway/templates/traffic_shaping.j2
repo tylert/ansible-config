@@ -52,17 +52,17 @@ function load
   tc qdisc add dev ${wan} parent 1:20 handle 20:0 sfq perturb 10
   tc qdisc add dev ${wan} parent 1:30 handle 30:0 sfq perturb 10
 
-  # iax -> voip.
+  # iax -> voip
   tc filter add dev ${wan} \
     parent 1:0 protocol ip prio 10 u32 \
     match ip dport 4569 0xffff flowid 1:10
 
-  # sip -> voip.
+  # sip -> voip
   tc filter add dev ${wan} \
     parent 1:0 protocol ip prio 10 u32 \
     match ip dport 5060 0xffff flowid 1:10
 
-  # smtp -> high.
+  # smtp -> high
   tc filter add dev ${wan} \
     parent 1:0 protocol ip prio 10 u32 \
     match ip dport 25 0xffff flowid 1:20
@@ -70,7 +70,7 @@ function load
     parent 1:0 protocol ip prio 10 u32 \
     match ip sport 25 0xffff flowid 1:20
 
-  # submission -> high.
+  # submission -> high
   tc filter add dev ${wan} \
     parent 1:0 protocol ip prio 10 u32 \
     match ip dport 587 0xffff flowid 1:20
@@ -78,17 +78,17 @@ function load
     parent 1:0 protocol ip prio 10 u32 \
     match ip sport 587 0xffff flowid 1:20
 
-  # imaps -> high.
+  # imaps -> high
   tc filter add dev ${wan} \
     parent 1:0 protocol ip prio 10 u32 \
     match ip dport 993 0xffff flowid 1:20
 
-  # icmp -> high.
+  # icmp -> high
   tc filter add dev ${wan} \
     parent 1:0 protocol ip prio 10 u32 \
     match ip protocol 1 0xff flowid 1:20
 
-  # tcp acks -> high.
+  # tcp acks -> high
   tc filter add dev ${wan} \
     parent 1:0 protocol ip prio 10 u32 \
     match ip protocol 6 0xff \
@@ -97,7 +97,7 @@ function load
     match u8 0x10 0xff at 33 \
     flowid 1:20
 
-  # ssh (minimize-delay) -> high.
+  # ssh (minimize-delay) -> high
   tc filter add dev ${wan} \
     parent 1:0 protocol ip prio 10 u32 \
     match ip tos 0x10 0xff flowid 1:20

@@ -9,6 +9,8 @@ Calculate the r2q value for traffic control script???
   [ $RTOQ_U -gt 20 ] && RTOQ_U=20
   [ $RTOQ_U -eq 0 ] && RTOQ_U=1
 
+http://wiki.linuxwall.info/doku.php/en:ressources:dossiers:networking:traffic_control
+
 ---
 
 Convert firewall to proper UFW things
