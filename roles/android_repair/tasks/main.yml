@@ -1,6 +1,10 @@
 ---
 
-# - include: [ '{{ ansible_distribution_release | lower }}.yml',
-#       '{{ ansible_distribution | lower }}.yml' ]
+- include_vars: [ '{{ ansible_distribution_release | lower }}.yml',
+    '{{ ansible_distribution | lower }}.yml', 'default.yml' ]
 
-# - include: {{ ansible_distribution | lower}}.yml
+- include: debian.yml
+  when: ansible_distribution == 'Debian'
+
+- include: ubuntu.yml
+  when: ansible_distribution == 'Ubuntu'

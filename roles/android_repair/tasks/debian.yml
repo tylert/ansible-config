@@ -2,6 +2,6 @@
 
 - name: Install adb
   apt:
-    pkg: android-tools-adb
+    pkg: '{{ adb_package }}'
     state: present
-  # when: ansible_distribution_version >= '8.0'
+  when: ansible_distribution_release == 'jessie'

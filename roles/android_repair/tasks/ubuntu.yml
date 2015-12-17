@@ -2,5 +2,5 @@
 
 - name: Install adb
   apt:
-    pkg: android-tools-adb
+    pkg: '{{ adb_package }}'
     state: present
