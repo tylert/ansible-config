@@ -1,5 +1,4 @@
 ansible==1.9.4
-argparse==1.2.1
 ecdsa==0.13
 Jinja2==2.8
 MarkupSafe==0.23
@@ -7,4 +6,3 @@ paramiko==1.16.0
 pycrypto==2.6.1
 PyYAML==3.11
 wheel==0.24.0
-wsgiref==0.1.2
