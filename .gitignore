@@ -1,5 +1,5 @@
 .DS_Store
-*.sw?
+.*.sw?
 ghost_id_rsa
 ghost_id_rsa.pub
 inventory
