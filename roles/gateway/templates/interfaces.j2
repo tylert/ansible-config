@@ -1,0 +1,32 @@
+# This file describes the network interfaces available on your system
+# and how to activate them. For more information, see interfaces(5).
+
+# The loopback network interface
+auto lo
+iface lo inet loopback
+
+# The primary network interface
+#allow-hotplug {{lan_interface_name | default('eth0')}}
+#iface {{lan_interface_name | default('eth0')}} inet dhcp
+
+auto {{lan_interface_name | default('eth0')}}
+iface {{lan_interface_name | default('eth0')}} inet static
+  address {{lan_ipv4_address | default('10.0.0.100')}}
+  netmask {{lan_ipv4_netmask | default('255.255.255.0')}}
+#  gateway {{| default('10.0.0.254')}}
+#  dns-domain {{| default('foo.com')}}
+#  dns-nameservers {{| default('10.0.0.254')}}
+
+auto {{wifi_interface_name | default('wlan0')}}
+iface {{wifi_interface_name | default('wlan0')}} inet static
+  address {{wifi_ipv4_address | default('10.0.1.100')}}
+  netmask {{wifi_ipv4_netmask | default('255.255.255.0')}}
+#  gateway {{| default('10.0.1.254')}}
+
+auto dsl-provider
+iface dsl-provider inet ppp
+pre-up /sbin/ifconfig {{wan_real_interface_name | default('eth1')}} up # line maintained by pppoeconf
+provider dsl-provider
+
+auto {{wan_real_interface_name | default('eth1')}}
+iface {{wan_real_interface_name | default('eth1')}} inet manual

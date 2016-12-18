@@ -34,12 +34,12 @@ function load
 
   echo -n "Loading egress QoS rules..."
 
-  # default -> norm (and shape everything to try to keep modem queuing happy).
+  # default -> norm (and shape everything to try to keep modem queuing happy)
   tc qdisc add dev ${wan} root handle 1:0 htb default 30 r2q 2
   tc class add dev ${wan} parent 1:0 classid 1:1 \
     htb rate ${upbw}kbit ceil ${upbw}kbit
 
-  # Create the various traffic tiers.
+  # Create the various traffic tiers
   tc class add dev ${wan} parent 1:1 classid 1:10 \
     htb rate ${voipbw}kbit ceil $((3 * ${voipbw}))kbit prio 0
   tc class add dev ${wan} parent 1:1 classid 1:20 \
@@ -47,7 +47,7 @@ function load
   tc class add dev ${wan} parent 1:1 classid 1:30 \
     htb rate ${normbw}kbit ceil ${upbw}kbit prio 2
 
-  # Ensure that traffic within each tier gets handled fairly.
+  # Ensure that traffic within each tier gets handled fairly
   tc qdisc add dev ${wan} parent 1:10 handle 10:0 sfq perturb 10
   tc qdisc add dev ${wan} parent 1:20 handle 20:0 sfq perturb 10
   tc qdisc add dev ${wan} parent 1:30 handle 30:0 sfq perturb 10
@@ -135,7 +135,7 @@ case "${1}" in
     ;;
 
   *)
-    echo "Usage:  start|stop|restart."
+    echo "Usage:  start|stop|restart"
     ;;
 esac
 
