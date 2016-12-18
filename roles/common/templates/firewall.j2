@@ -2,6 +2,11 @@
 
 set -e
 
+# ebtables tables and default chains
+#   filter    INPUT, FORWARD, OUTPUT
+#   nat       PREROUTING, OUTPUT, POSTROUTING
+#   broute    BROUTING
+
 # iptables tables and default chains
 #   filter    INPUT, FORWARD, OUTPUT
 #   nat       PREROUTING, OUTPUT, POSTROUTING
@@ -15,20 +20,20 @@ set -e
 #   raw       PREROUTING, OUTPUT
 #   security  INPUT, OUTPUT, FORWARD
 
-function block
+function block_L3
 {
   local iptables="${1}"
   local localhost="${2}"
 
   echo -n "Loading '${iptables}' blocking rules..."
 
-  # Be more picky about what we forward.
+  # Be more picky about what we forward
   ${iptables} --table filter --policy FORWARD DROP
 
-  # Be more picky about what we allow.
+  # Be more picky about what we allow
   ${iptables} --table filter --policy INPUT DROP
 
-  # Attempt to protect against SYN flooding.
+  # Attempt to protect against SYN flooding
 {% if 'gateway' not in group_names %}
   ${iptables} --table filter --append INPUT \
     --protocol tcp --syn --match limit \
@@ -39,7 +44,7 @@ function block
 #    --limit 25/s --limit-burst 50 --jump ACCEPT
 {% endif %}
 
-  # Accept a few pings.
+  # Accept a few pings
   if [ "ip6tables" == ${iptables} ]; then
     ${iptables} --table filter --append INPUT \
       --protocol icmpv6 --match limit \
@@ -50,15 +55,15 @@ function block
       --limit 4/s --limit-burst 8 --jump ACCEPT
   fi
 
-  # Accept existing connections.
+  # Accept existing connections
   ${iptables} --table filter --append INPUT \
     --match state --state ESTABLISHED,RELATED --jump ACCEPT
 
-  # Accept local connections.
+  # Accept local connections
   ${iptables} --table filter --append INPUT \
     --source ${localhost} --jump ACCEPT
 
-  # Accept ssh.
+  # Accept ssh
 {% if 'gateway' not in group_names %}
   ${iptables} --table filter --append INPUT \
     --protocol tcp --match tcp --dport 22 --jump ACCEPT
@@ -74,7 +79,35 @@ function block
   echo "DONE"
 }
 
-function forward
+function forward_L2
+{
+  local ebtables="ebtables"
+
+  local lan="{{ lan_interface_name | default('eth0') }}"
+  local wifi="{{ wifi_interface_name | default('wlan0') }}"
+
+  echo -n "Loading ebtables forwarding rules..."
+
+  # http://serverfault.com/questions/276596/forward-broadcast-to-fixed-ip-using-iptables
+
+  # Forward broadcast traffic from WIFI to LAN
+  ${ebtables} --table filter --append FORWARD \
+    --in-interface ${wifi} --out-interface ${lan} \
+    --source ff:ff:ff:ff:ff:ff/ff:ff:ff:ff:ff:ff \
+    --destination ff:ff:ff:ff:ff:ff/ff:ff:ff:ff:ff:ff \
+    --jump ACCEPT
+
+  # Forward broadcast traffic from LAN to WIFI
+  ${ebtables} --table filter --append FORWARD \
+    --in-interface ${lan} --out-interface ${wifi} \
+    --source ff:ff:ff:ff:ff:ff/ff:ff:ff:ff:ff:ff \
+    --destination ff:ff:ff:ff:ff:ff/ff:ff:ff:ff:ff:ff \
+    --jump ACCEPT
+
+  echo "DONE"
+}
+
+function forward_L3
 {
   local iptables="${1}"
 
@@ -84,63 +117,83 @@ function forward
 
   echo -n "Loading '${iptables}' forwarding rules..."
 
-  # Honour MTU (http://lartc.org/howto/lartc.cookbook.mtu-mss.html).
+  # Honour MTU (http://lartc.org/howto/lartc.cookbook.mtu-mss.html)
   ${iptables} --table filter --append FORWARD \
     --protocol tcp --tcp-flags SYN,RST SYN --jump TCPMSS --clamp-mss-to-pmtu
 
-  # Enable NAT.
+  # Enable NAT
   if [ "iptables" == ${iptables} ]; then
     ${iptables} --table nat --append POSTROUTING \
       --out-interface ${wan} --jump MASQUERADE
   fi
 
-  # Forward traffic on WIFI to LAN.
+  # Forward traffic on WIFI to LAN
   ${iptables} --table filter --append FORWARD \
     --in-interface ${wifi} --out-interface ${lan} --jump ACCEPT
-  # Forward traffic on LAN to WIFI.
+
+  # Forward traffic on LAN to WIFI
   ${iptables} --table filter --append FORWARD \
     --in-interface ${lan} --out-interface ${wifi} --jump ACCEPT
 
-  # Forward traffic on LAN to WAN.
+  # Forward traffic on LAN to WAN
   ${iptables} --table filter --append FORWARD \
     --in-interface ${lan} --out-interface ${wan} --jump ACCEPT
-  # Forward traffic on WIFI to WAN.
+
+  # Forward traffic on WIFI to WAN
   ${iptables} --table filter --append FORWARD \
     --in-interface ${wifi} --out-interface ${wan} --jump ACCEPT
 
-  # Forward traffic on WAN to LAN.
+  # Forward traffic on WAN to LAN
   ${iptables} --table filter --append FORWARD \
     --in-interface ${wan} --out-interface ${lan} --match state \
     --state ESTABLISHED,RELATED --jump ACCEPT
-  # Forward traffic on WAN to WIFI.
+
+  # Forward traffic on WAN to WIFI
   ${iptables} --table filter --append FORWARD \
     --in-interface ${wan} --out-interface ${wifi} --match state \
     --state ESTABLISHED,RELATED --jump ACCEPT
 
-  # Accept connections from the LAN.
+  # Accept connections from the LAN
   ${iptables} --table filter --append INPUT \
     --in-interface ${lan} --jump ACCEPT
-  # Accept connections over WIFI.
+
+  # Accept connections over WIFI
   ${iptables} --table filter --append INPUT \
     --in-interface ${wifi} --jump ACCEPT
 
   echo "DONE"
 }
 
-function load
+function load_L2
+{
+  forward_L2
+}
+
+function load_L3
 {
   local iptables="${1}"
   local localhost="${2}"
 
-  block ${iptables} ${localhost}
+  block_L3 ${iptables} ${localhost}
 {% if 'gateway' in group_names %}
-  forward ${iptables}
+  forward_L3 ${iptables}
 {% else %}
-  #forward ${iptables}
+  #forward_L3 ${iptables}
 {% endif %}
 }
 
-function flush
+function flush_L2
+{
+  local ebtables="ebtables"
+
+  echo -n "Flushing ebtables rules..."
+
+  ${ebtables} --table filter --flush
+
+  echo "DONE"
+}
+
+function flush_L3
 {
   local iptables="${1}"
 
@@ -161,15 +214,18 @@ function flush
 
 case "${1}" in
   start|restart)
-    flush iptables
-    load iptables 127.0.0.1
-    flush ip6tables
-    load ip6tables ::1
+    flush_L2
+    load_L2
+    flush_L3 iptables
+    load_L3 iptables 127.0.0.1
+    flush_L3 ip6tables
+    load_L3 ip6tables ::1
     ;;
 
   stop)
-    flush iptables
-    flush ip6tables
+    flush_L2
+    flush_L3 iptables
+    flush_L3 ip6tables
     ;;
 
   *)
