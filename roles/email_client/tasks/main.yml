@@ -1,7 +1,9 @@
 ---
 
 - name: Install icedove
-  apt: pkg={{ item }} state=present
+  apt:
+    pkg: '{{ item }}'
+    state: present
   with_items:
     - icedove
     - enigmail
@@ -10,10 +12,12 @@
   when: graphical and ansible_distribution == 'Debian'
 
 - name: Install thunderbird
-  apt: pkg={{ item }} state=present
+  apt:
+    pkg: '{{ item }}'
+    state: present
   with_items:
     - thunderbird
     - enigmail
     - xul-ext-lightning
-  # there doesn't seem to be a proper sogo connector package
+    # there doesn't seem to be a proper sogo connector package
   when: graphical and ansible_distribution == 'Ubuntu'

@@ -1,9 +1,14 @@
 ---
 
 - name: Install synaptic
-  apt: pkg=synaptic state=present
+  apt:
+    pkg: synaptic
+    state: present
   when: graphical
 
 - name: Remove software-center
-  apt: pkg=software-center state=absent purge=yes
+  apt:
+    pkg: software-center
+    state: absent
+    purge: yes
   when: ansible_distribution == 'Ubuntu'

@@ -1,15 +1,23 @@
 ---
 
 - name: Install hostapd
-  apt: pkg=hostapd state=present
+  apt:
+    pkg: hostapd
+    state: present
 
 - name: Copy hostapd config
-  template: src=hostapd.conf.j2 dest=/etc/hostapd/site.conf
-            owner=root group=root mode=0644
+  template:
+    src: hostapd.conf.j2
+    dest: /etc/hostapd/site.conf
+    owner: root
+    group: root
+    mode: 0644
   notify: Restart hostapd
 
 - name: Enable hostapd config
-  lineinfile: dest=/etc/default/hostapd
-              line='DAEMON_CONF="/etc/hostapd/site.conf"'
-              insertafter='^#DAEMON_CONF=' state=present
+  lineinfile:
+    dest: /etc/default/hostapd
+    line: 'DAEMON_CONF="/etc/hostapd/site.conf"'
+    insertafter: '^#DAEMON_CONF='
+    state: present
   notify: Restart hostapd

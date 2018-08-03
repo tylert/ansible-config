@@ -1,7 +1,12 @@
 ---
 
 - name: Install sshfs
-  apt: pkg=sshfs state=present
+  apt:
+    pkg: sshfs
+    state: present
 
 - name: Correct fuse options
-  lineinfile: dest=/etc/fuse.conf line='user_allow_other' state=present
+  lineinfile:
+    dest: /etc/fuse.conf
+    line: 'user_allow_other'
+    state: present

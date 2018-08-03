@@ -1,8 +1,10 @@
 .DS_Store
 .*.sw?
-ghost_id_rsa
-ghost_id_rsa.pub
+*.retry
+*.py[co]
+__pycache__/
 inventory
 ansible.cfg
+ghost_id_rsa
+ghost_id_rsa.pub
 roles/gateways/vars/main.yml
-*.pyc

@@ -1,26 +1,46 @@
 ---
 
 - name: Install curl
-  apt: pkg=curl state=present
+  apt:
+    pkg: curl
+    state: present
 
 - name: Install ad sites fetcher
-  template: src=fetch_ad_sites.sh.j2 dest=/usr/local/sbin/fetch_ad_sites.sh
-            owner=root group=root mode=0755
+  template:
+    src: fetch_ad_sites.sh.j2
+    dest: /usr/local/sbin/fetch_ad_sites.sh
+    owner: root
+    group: root
+    mode: 0755
   notify: Fetch ad sites
 
 - name: Add cron to re-fetch ad sites
-  cron: name='fetch ad sites' user=root special_time=weekly
-        job='/usr/local/sbin/fetch_ad_sites.sh' state=present
+  cron:
+    name: 'fetch ad sites'
+    user: root
+    special_time: weekly
+    job: /usr/local/sbin/fetch_ad_sites.sh
+    state: present
 
 - name: Install gunicorn
-  apt: pkg=gunicorn state=present
+  apt:
+    pkg: gunicorn
+    state: present
 
 - name: Install ad server config
-  template: src=ad_server.conf.j2 dest=/etc/gunicorn.d/ad_server.conf
-            owner=root group=root mode=0644
+  template:
+    src: ad_server.conf.j2
+    dest: /etc/gunicorn.d/ad_server.conf
+    owner: root
+    group: root
+    mode: 0644
   notify: Restart gunicorn
 
 - name: Install ad server
-  template: src=ad_server.py.j2 dest=/usr/local/sbin/ad_server.py
-            owner=root group=root mode=0644
+  template:
+    src: ad_server.py.j2
+    dest: /usr/local/sbin/ad_server.py
+    owner: root
+    group: root
+    mode: 0644
   notify: Restart gunicorn

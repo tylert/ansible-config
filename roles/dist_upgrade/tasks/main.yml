@@ -1,4 +1,7 @@
 ---
 
 - name: Perform a dist-upgrade
-  apt: update_cache=yes upgrade=dist cache_valid_time=43200  # 12h
+  apt:
+    update_cache: yes
+    upgrade: dist
+    cache_valid_time: 43200  # 12h

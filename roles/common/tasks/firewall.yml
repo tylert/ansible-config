@@ -1,13 +1,22 @@
 ---
 
 - name: Install ebtables
-  apt: pkg=ebtables state=present
+  apt:
+    pkg: ebtables
+    state: present
 
 - name: Install firewall
-  template: src=firewall.j2 dest=/etc/firewall
-            owner=root group=root mode=0755
+  template:
+    src: firewall.j2
+    dest: /etc/firewall
+    owner: root
+    group: root
+    mode: 0755
   notify: Restart firewall
 
 - name: Enable firewall
-  lineinfile: dest=/etc/rc.local insertbefore='exit 0'
-              line='/etc/firewall start' state=present
+  lineinfile:
+    dest: /etc/rc.local
+    insertbefore: 'exit 0'
+    line: '/etc/firewall start'
+    state: present

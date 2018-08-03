@@ -1,8 +1,12 @@
 ---
 
 - name: Install hdhomerun-config
-  apt: pkg=hdhomerun-config state=present
+  apt:
+    pkg: hdhomerun-config
+    state: present
 
 - name: Install hdhomerun-config-gui
-  apt: pkg=hdhomerun-config-gui state=present
+  apt:
+    pkg: hdhomerun-config-gui
+    state: present
   when: graphical and ansible_distribution == 'Ubuntu'

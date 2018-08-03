@@ -1,8 +1,12 @@
 ---
 
 - name: Configure sysctl settings
-  sysctl: sysctl_file=/etc/sysctl.d/local.conf reload=yes
-          name={{ item.key }} value={{ item.value }} state=present
+  sysctl:
+    sysctl_file: /etc/sysctl.d/local.conf
+    reload: yes
+    name: '{{ item.key }}'
+    value: '{{ item.value }}'
+    state: present
   with_items:
     - { key: 'net.ipv4.ip_forward', value: '1' }
     - { key: 'net.ipv4.tcp_syncookies', value: '1' }

@@ -1,11 +1,13 @@
 ---
 
 - name: Correct xdg-user-dirs
-  lineinfile: dest=/etc/xdg/user-dirs.defaults backrefs=yes
-              regexp=^{{ item.key }}={{ item.old_value }}
-              line={{ item.key }}={{ item.new_value }}
+  lineinfile:
+    dest: /etc/xdg/user-dirs.defaults
+    backrefs: yes
+    regexp: '^{{ item.key }}={{ item.old_value }}'
+    line: '{{ item.key }}={{ item.new_value }}'
   with_items:
-#    - { key: 'DESKTOP', old_value: 'Desktop', new_value: 'Desktop' }
+    - { key: 'DESKTOP', old_value: 'Desktop', new_value: 'Desktop' }
     - { key: 'DOWNLOAD', old_value: 'Downloads', new_value: '' }
     - { key: 'TEMPLATES', old_value: 'Templates', new_value: '' }
     - { key: 'PUBLICSHARE', old_value: 'Public', new_value: '' }

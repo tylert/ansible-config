@@ -1,8 +1,10 @@
 ---
 
-- name: Install python-software-properties
-#  apt: pkg=python-software-properties state=present  # add-apt-repository
-  apt: pkg=software-properties-common state=present  # add-apt-repository
+- name: Install add-apt-repository
+  apt:
+    # pkg: python-software-properties  # add-apt-repository
+    pkg: software-properties-common  # add-apt-repository
+    state: present
 
 - name: Add flirc repository
   command: add-apt-repository --yes
@@ -11,4 +13,6 @@
   notify: Update apt cache
 
 - name: Install flirc
-  apt: pkg=flirc state=present
+  apt:
+    pkg: flirc
+    state: present

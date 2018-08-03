@@ -1,5 +1,9 @@
 ---
 
 - name: Install backup script
-  template: src=backup_stuff.j2 dest={{ backup_user }}/bin/backup_stuff
-            owner={{ backup_user }} group={{ backup_user_group }} mode=0755
+  template:
+    src: backup_stuff.j2
+    dest: '{{ backup_user }}/bin/backup_stuff'
+    owner: '{{ backup_user }}'
+    group: '{{ backup_user_group }}'
+    mode: 0755

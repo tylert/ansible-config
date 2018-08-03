@@ -1,7 +1,9 @@
 ---
 
 - name: Install wireless tools
-  apt: pkg={{ item }} state=present
+  apt:
+    pkg: '{{ item }}'
+    state: present
   with_items:
     - python-software-properties  # add-apt-repository
     - wireless-tools
@@ -22,7 +24,9 @@
   when: ansible_distribution == 'Debian'
 
 - name: Install wireless drivers
-  apt: pkg={{ item }} state=present
+  apt:
+    pkg: '{{ item }}'
+    state: present
   with_items:
     - firmware-ralink  # non-free
   when: ansible_distribution == 'Debian'

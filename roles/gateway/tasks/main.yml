@@ -9,4 +9,6 @@
 - include: ad_filtering.yml
 
 - name: Install gateway packages
-  apt: pkg=pppoeconf state=present
+  apt:
+    pkg: pppoeconf
+    state: present

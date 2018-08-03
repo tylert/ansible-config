@@ -1,18 +1,22 @@
 ---
 
 - name: Install pip
-  easy_install: name=pip state=latest
-#  easy_install: name=pip state=present
+  easy_install:
+    name: pip
+    state: present
 
 - name: Install virtualenv
-  pip: name=virtualenv state=latest
-#  pip: name=virtualenv state=present
+  pip:
+    name: virtualenv
+    state: present
 
 - name: Install brew
-  command: ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+  command: ruby -e '$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)'
 
 - name: Install brew packages
-  homebrew: name={{ item }} state=present
+  homebrew:
+    name: '{{ item }}'
+    state: present
   with_items:
     - git
     - macvim
@@ -21,4 +25,6 @@
     - wget
 
 - name: Upgrade brew packages
-  homebrew: update_homebrew=yes upgrade_all=yes
+  homebrew:
+    update_homebrew: yes
+    upgrade_all: yes

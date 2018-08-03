@@ -1,14 +1,19 @@
 ---
 
 - name: Install libreoffice
-  apt: pkg={{ item }} state=present
+  apt:
+    pkg: '{{ item }}'
+    state: present
   with_items:
     - libreoffice
     - libreoffice-pdfimport
   when: graphical
 
 - name: Remove abiword and gnumeric
-  apt: pkg={{ item }} state=absent purge=yes
+  apt:
+    pkg: '{{ item }}'
+    state: absent
+    purge: yes
   with_items:
     - abiword
     - gnumeric

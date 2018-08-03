@@ -1,16 +1,24 @@
 ---
 
 - name: Turn off sudo passwords for members of the ghost group
-  lineinfile: dest=/etc/sudoers.d/99-ghost create=yes
-              line='%ghost ALL=(ALL) NOPASSWD:ALL' state=present
+  lineinfile:
+    dest: /etc/sudoers.d/99-ghost
+    create: yes
+    line: '%ghost ALL=(ALL) NOPASSWD:ALL'
+    state: present
 
 - name: Disable password login for the ghost user
-  user: name=ghost password='!' state=present
+  user:
+    name: ghost
+    password: '!'
+    state: present
 
 - include: firewall.yml
 
 - name: Install some essential administration packages needed on all machines
-  apt: pkg={{ item }} state=present
+  apt:
+    pkg: '{{ item }}'
+    state: present
   with_items:
     - openssh-server
     - sudo
@@ -18,4 +26,4 @@
     - rsync
     - ethtool
 
-#- include: backup_stuff.yml
+# - include: backup_stuff.yml

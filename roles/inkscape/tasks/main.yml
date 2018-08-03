@@ -1,10 +1,14 @@
 ---
 
 - name: Add inkscape latest repository
-  apt_repository: repo='ppa:inkscape.dev/stable' update_cache=yes
-                  state=present
+  apt_repository:
+    repo: 'ppa:inkscape.dev/stable'
+    update_cache: yes
+    state: present
   when: graphical and ansible_distribution == 'Ubuntu'
 
 - name: Install inkscape latest
-  apt: pkg=inkscape state=present
+  apt:
+    pkg: inkscape
+    state: present
   when: graphical and ansible_distribution == 'Ubuntu'
