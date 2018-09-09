@@ -6,7 +6,7 @@
   apt:
     pkg: '{{ item }}'
     state: present
-  with_items:
+  loop:
     - build-essential
     - keepassx
     - librecad

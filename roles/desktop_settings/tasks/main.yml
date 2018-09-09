@@ -6,7 +6,7 @@
     backrefs: yes
     regexp: '^{{ item.key }}={{ item.old_value }}'
     line: '{{ item.key }}={{ item.new_value }}'
-  with_items:
+  loop:
     - { key: 'DESKTOP', old_value: 'Desktop', new_value: 'Desktop' }
     - { key: 'DOWNLOAD', old_value: 'Downloads', new_value: '' }
     - { key: 'TEMPLATES', old_value: 'Templates', new_value: '' }

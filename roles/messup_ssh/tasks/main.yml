@@ -1,0 +1,30 @@
+---
+
+# - name: Disable password only logins over ssh
+#   lineinfile:
+#     dest: /etc/ssh/sshd_config
+#     backup: yes
+#     state: present
+#     regexp: '^#PasswordAuthentication yes'
+#     backrefs: yes
+#     line: 'PasswordAuthentication no'
+#   notify: Restart ssh
+
+# - name: Turn on alternate ssh port
+#   lineinfile:
+#     dest: /etc/ssh/sshd_config
+#     backup: yes
+#     state: present
+#     insertafter: '^Port 22'
+#     line: 'Port {{ alternate_ssh_port }}'
+#   notify: Restart ssh
+
+# - name: Turn off default ssh port
+#   lineinfile:
+#     dest: /etc/ssh/sshd_config
+#     backup: yes
+#     state: present
+#     regexp: '^Port 22'
+#     backrefs: yes
+#     line: '#Port 22'
+#   notify: Restart ssh

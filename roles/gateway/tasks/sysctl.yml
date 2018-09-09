@@ -7,7 +7,7 @@
     name: '{{ item.key }}'
     value: '{{ item.value }}'
     state: present
-  with_items:
+  loop:
     - { key: 'net.ipv4.ip_forward', value: '1' }
     - { key: 'net.ipv4.tcp_syncookies', value: '1' }
     - { key: 'net.ipv4.conf.all.rp_filter', value: '1' }
