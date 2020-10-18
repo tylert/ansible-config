@@ -1,7 +1,0 @@
----
-
-- name: Install adb
-  apt:
-    pkg: '{{ adb_package }}'
-    state: present
-  when: ansible_distribution_release == 'jessie'

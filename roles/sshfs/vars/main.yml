@@ -1,5 +1,0 @@
----
-
-bin_path: /usr/local/bin
-remote_location: file:/
-local_location: \$HOME/file
