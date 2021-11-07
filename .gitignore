@@ -1,7 +1,7 @@
 .DS_Store
 .*.sw?
 *.retry
-*.py[co]
+*.py[coz]
 __pycache__/
 inventory
 ansible.cfg
